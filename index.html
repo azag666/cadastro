@@ -6,86 +6,171 @@
   <title>Onboarding de Cliente SaaS - Seu Sistema de Leads</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome para ícones de ajuda -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f0f2f5;
+      background-color: #1a202c; /* Fundo escuro */
+      color: #e2e8f0; /* Texto claro */
+    }
+    .card-bg {
+      background-color: #2d3748; /* Fundo do card mais escuro */
+    }
+    .input-field {
+      background-color: #4a5568; /* Fundo dos inputs */
+      border-color: #4a5568; /* Borda dos inputs */
+      color: #e2e8f0; /* Texto dos inputs */
+    }
+    .input-field:focus {
+      border-color: #63b3ed; /* Borda ao focar */
+      box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.5); /* Sombra ao focar */
+    }
+    .btn-primary {
+      background-color: #4299e1; /* Azul primário */
+      transition: background-color 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #3182ce;
+    }
+    .btn-secondary {
+      background-color: #718096; /* Cinza secundário */
+      transition: background-color 0.3s ease;
+    }
+    .btn-secondary:hover {
+      background-color: #5f6b7c;
+    }
+    .btn-success {
+      background-color: #48bb78; /* Verde sucesso */
+      transition: background-color 0.3s ease;
+    }
+    .btn-success:hover {
+      background-color: #38a169;
+    }
+    .btn-info {
+      background-color: #9f7aea; /* Roxo info */
+      transition: background-color 0.3s ease;
+    }
+    .btn-info:hover {
+      background-color: #805ad5;
+    }
+    .help-icon {
+      color: #63b3ed; /* Cor do ícone de ajuda */
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    .help-icon:hover {
+      color: #3182ce;
+    }
+    .modal-overlay {
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    .modal-content {
+      background-color: #2d3748;
+      color: #e2e8f0;
     }
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
-  <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Onboarding de Novo Cliente SaaS</h1>
-    <p class="text-gray-600 mb-8 text-center">Preencha as informações abaixo para configurar o acesso ao nosso sistema de rastreamento de leads e PIX.</p>
+  <div class="card-bg p-8 rounded-lg shadow-xl w-full max-w-2xl">
+    <h1 class="text-3xl font-bold text-gray-100 mb-6 text-center">CADASTRO TRACKING</h1>
+    <p class="text-gray-300 mb-8 text-center">Preencha as informações abaixo para configurar o acesso ao nosso sistema de rastreamento de leads e PIX.</p>
 
     <form id="onboardingForm" class="space-y-6">
-      <div>
-        <label for="client_name" class="block text-sm font-medium text-gray-700 mb-1">Nome do Cliente/Empresa:</label>
-        <input type="text" id="client_name" name="client_name" required
-               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      <div class="relative">
+        <label for="client_name" class="block text-sm font-medium text-gray-300 mb-1">Nome do Cliente/Empresa:</label>
+        <div class="flex items-center">
+          <input type="text" id="client_name" name="client_name" required
+                 class="input-field mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          <i class="fas fa-info-circle help-icon ml-2" data-tutorial-id="client_name"></i>
+        </div>
       </div>
-      <div>
-        <label for="telegram_bot_username" class="block text-sm font-medium text-gray-700 mb-1">Username do Bot Telegram (ex: @meubot_bot):</label>
-        <input type="text" id="telegram_bot_username" name="telegram_bot_username" required
-               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      <div class="relative">
+        <label for="telegram_bot_username" class="block text-sm font-medium text-gray-300 mb-1">Username do Bot Telegram (ex: @meubot_bot):</label>
+        <div class="flex items-center">
+          <input type="text" id="telegram_bot_username" name="telegram_bot_username" required
+                 class="input-field mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          <i class="fas fa-info-circle help-icon ml-2" data-tutorial-id="telegram_bot_username"></i>
+        </div>
       </div>
-      <div>
-        <label for="pushinpay_token" class="block text-sm font-medium text-gray-700 mb-1">Token da PushinPay (ou outro gateway de PIX):</label>
-        <input type="text" id="pushinpay_token" name="pushinpay_token" required
-               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      <div class="relative">
+        <label for="pushinpay_token" class="block text-sm font-medium text-gray-300 mb-1">Token da PushinPay (ou outro gateway de PIX):</label>
+        <div class="flex items-center">
+          <input type="text" id="pushinpay_token" name="pushinpay_token" required
+                 class="input-field mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          <i class="fas fa-info-circle help-icon ml-2" data-tutorial-id="pushinpay_token"></i>
+        </div>
       </div>
-      <div>
-        <label for="meta_pixel_id" class="block text-sm font-medium text-gray-700 mb-1">ID do Pixel da Meta (Facebook Pixel ID):</label>
-        <input type="text" id="meta_pixel_id" name="meta_pixel_id"
-               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-        <p class="mt-1 text-xs text-gray-500">Opcional. Se não fornecido, usaremos o Pixel padrão do SaaS.</p>
+      <div class="relative">
+        <label for="meta_pixel_id" class="block text-sm font-medium text-gray-300 mb-1">ID do Pixel da Meta (Facebook Pixel ID):</label>
+        <div class="flex items-center">
+          <input type="text" id="meta_pixel_id" name="meta_pixel_id" required
+                 class="input-field mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          <i class="fas fa-info-circle help-icon ml-2" data-tutorial-id="meta_pixel_id"></i>
+        </div>
+        <p class="mt-1 text-xs text-gray-400">Este campo é obrigatório.</p>
       </div>
-      <div>
-        <label for="meta_conversion_api_token" class="block text-sm font-medium text-gray-700 mb-1">Token da API de Conversões da Meta:</label>
-        <input type="text" id="meta_conversion_api_token" name="meta_conversion_api_token"
-               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-        <p class="mt-1 text-xs text-gray-500">Opcional. Se não fornecido, usaremos o Token padrão do SaaS.</p>
+      <div class="relative">
+        <label for="meta_conversion_api_token" class="block text-sm font-medium text-gray-300 mb-1">Token da API de Conversões da Meta:</label>
+        <div class="flex items-center">
+          <input type="text" id="meta_conversion_api_token" name="meta_conversion_api_token" required
+                 class="input-field mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+          <i class="fas fa-info-circle help-icon ml-2" data-tutorial-id="meta_conversion_api_token"></i>
+        </div>
+        <p class="mt-1 text-xs text-gray-400">Este campo é obrigatório.</p>
       </div>
 
       <button type="submit"
-              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+              class="btn-primary w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
         Onboardar Cliente
       </button>
     </form>
 
-    <div id="results" class="mt-8 p-6 bg-gray-50 rounded-md hidden">
-      <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Configuração Concluída!</h2>
-      <p class="text-gray-700 mb-2">Seu **Client ID** é: <code class="font-mono bg-yellow-200 p-1 rounded" id="clientIdDisplay"></code></p>
-      <p class="text-gray-700 mb-4">Use este ID para acessar suas configurações personalizadas:</p>
+    <div id="results" class="mt-8 p-6 card-bg rounded-md hidden border border-gray-700">
+      <h2 class="text-2xl font-bold text-gray-100 mb-4 text-center">Configuração Concluída!</h2>
+      <p class="text-gray-300 mb-2">Seu **Client ID** é: <code class="font-mono bg-yellow-700 text-yellow-100 p-1 rounded" id="clientIdDisplay"></code></p>
+      <p class="text-gray-300 mb-4">Use este ID para acessar suas configurações personalizadas:</p>
 
       <div class="space-y-4">
         <div>
-          <h3 class="font-semibold text-gray-800">1. Pressel HTML Personalizada:</h3>
-          <p class="text-sm text-gray-600 mb-2">Copie o código abaixo e salve como `index.html` para sua pressel. Ele já contém seu Pixel ID e bot do Telegram.</p>
-          <button id="getPresselHtmlBtn" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out">
+          <h3 class="font-semibold text-gray-100">1. Pressel HTML Personalizada:</h3>
+          <p class="text-sm text-gray-400 mb-2">Copie o código abaixo e salve como `index.html` para sua pressel. Ele já contém seu Pixel ID e bot do Telegram.</p>
+          <button id="getPresselHtmlBtn" class="btn-success w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out">
             Obter Código da Pressel HTML
           </button>
-          <pre id="presselHtmlCode" class="bg-gray-800 text-white p-4 rounded-md mt-2 text-xs overflow-auto max-h-64 hidden"></pre>
-          <button id="copyPresselHtmlBtn" class="mt-2 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out hidden">
+          <pre id="presselHtmlCode" class="bg-gray-900 text-green-300 p-4 rounded-md mt-2 text-xs overflow-auto max-h-64 hidden border border-gray-700"></pre>
+          <button id="copyPresselHtmlBtn" class="btn-secondary mt-2 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out hidden">
             Copiar Código da Pressel
           </button>
         </div>
 
         <div>
-          <h3 class="font-semibold text-gray-800">2. Configurações do ManyChat (Fluxos):</h3>
-          <p class="text-sm text-gray-600 mb-2">Siga as instruções abaixo para configurar os blocos de requisição externa no seu ManyChat. Elas já estão personalizadas para você.</p>
-          <button id="getManyChatConfigBtn" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out">
+          <h3 class="font-semibold text-gray-100">2. Configurações do ManyChat (Fluxos):</h3>
+          <p class="text-sm text-gray-400 mb-2">Siga as instruções abaixo para configurar os blocos de requisição externa no seu ManyChat. Elas já estão personalizadas para você.</p>
+          <button id="getManyChatConfigBtn" class="btn-info w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out">
             Obter Configurações do ManyChat
           </button>
-          <pre id="manyChatConfigMarkdown" class="bg-gray-800 text-white p-4 rounded-md mt-2 text-xs overflow-auto max-h-64 hidden"></pre>
-          <button id="copyManyChatConfigBtn" class="mt-2 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out hidden">
+          <pre id="manyChatConfigMarkdown" class="bg-gray-900 text-purple-300 p-4 rounded-md mt-2 text-xs overflow-auto max-h-64 hidden border border-gray-700"></pre>
+          <button id="copyManyChatConfigBtn" class="btn-secondary mt-2 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out hidden">
             Copiar Configurações do ManyChat
           </button>
         </div>
       </div>
     </div>
 
-    <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <!-- Modal para Tutoriais -->
+    <div id="tutorialModal" class="fixed inset-0 modal-overlay flex items-center justify-center hidden z-50">
+      <div class="modal-content p-6 rounded-lg shadow-xl max-w-lg w-full text-center">
+        <h3 id="tutorialTitle" class="text-xl font-bold text-gray-100 mb-4"></h3>
+        <p id="tutorialText" class="text-gray-300 text-base mb-4 text-left"></p>
+        <button id="closeTutorialModal" class="btn-primary py-2 px-4 rounded">
+          Entendi
+        </button>
+      </div>
+    </div>
+
+    <!-- Message Box (mantido para mensagens de sucesso/erro) -->
+    <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-40">
       <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
         <p id="messageText" class="text-gray-800 text-lg mb-4"></p>
         <button id="closeMessageBox" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
@@ -111,6 +196,37 @@
     const messageText = document.getElementById('messageText');
     const closeMessageBox = document.getElementById('closeMessageBox');
 
+    // Elementos do Modal de Tutorial
+    const tutorialModal = document.getElementById('tutorialModal');
+    const tutorialTitle = document.getElementById('tutorialTitle');
+    const tutorialText = document.getElementById('tutorialText');
+    const closeTutorialModal = document.getElementById('closeTutorialModal');
+    const helpIcons = document.querySelectorAll('.help-icon');
+
+    // Conteúdo dos Tutoriais
+    const tutorials = {
+      client_name: {
+        title: "Nome do Cliente/Empresa",
+        text: "Este é o nome da sua empresa ou do cliente que você está onboardando. Será usado para identificação interna e para personalizar as configurações."
+      },
+      telegram_bot_username: {
+        title: "Username do Bot Telegram",
+        text: "Vá para o BotFather no Telegram, crie ou selecione seu bot, e copie o 'Username' dele (ex: @meubot_bot). Este username será usado na pressel para redirecionar usuários para o bot correto."
+      },
+      pushinpay_token: {
+        title: "Token da PushinPay (ou outro gateway de PIX)",
+        text: "Obtenha o token de autenticação da API do seu gateway de pagamento principal (ex: PushinPay, Oasyfy, etc.). Geralmente, é um token 'Bearer' ou uma chave de API secreta fornecida no painel do provedor. Este token será usado para gerar PIX."
+      },
+      meta_pixel_id: {
+        title: "ID do Pixel da Meta (Facebook Pixel ID)",
+        text: "No Gerenciador de Eventos da Meta (Facebook Business Manager), selecione seu Pixel e copie o ID numérico. Ele é usado para rastrear eventos no navegador e para a API de Conversões."
+      },
+      meta_conversion_api_token: {
+        title: "Token da API de Conversões da Meta",
+        text: "No Gerenciador de Eventos da Meta, vá em 'Configurações' do seu Pixel, role para baixo até a seção 'API de Conversões' e clique em 'Gerar Token de Acesso'. Este token é vital para enviar eventos de servidor para o Facebook, garantindo um rastreamento mais preciso."
+      }
+    };
+
     function showMessage(message) {
       messageText.textContent = message;
       messageBox.classList.remove('hidden');
@@ -118,6 +234,24 @@
 
     closeMessageBox.addEventListener('click', () => {
       messageBox.classList.add('hidden');
+    });
+
+    // Lógica para abrir o modal de tutorial
+    helpIcons.forEach(icon => {
+      icon.addEventListener('click', (e) => {
+        const tutorialId = e.target.dataset.tutorialId;
+        const tutorialContent = tutorials[tutorialId];
+        if (tutorialContent) {
+          tutorialTitle.textContent = tutorialContent.title;
+          tutorialText.textContent = tutorialContent.text;
+          tutorialModal.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Lógica para fechar o modal de tutorial
+    closeTutorialModal.addEventListener('click', () => {
+      tutorialModal.classList.add('hidden');
     });
 
     onboardingForm.addEventListener('submit', async (e) => {
