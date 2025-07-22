@@ -1,0 +1,97 @@
+
+## Configurações ManyChat para o seu Bot
+
+Siga estes passos para integrar seu bot do ManyChat com o sistema de rastreamento e geração de PIX.
+
+### Passo 1: Criar uma Variável Personalizada para o Token da Pushin Pay
+
+Crie uma variável para armazenar seu token de autenticação da Pushin Pay.
+
+* No ManyChat, vá em **Configurações (Settings) > Automação (Automation) > Campos Personalizados (Custom Fields)**.
+* Crie um novo campo personalizado:
+    * **Nome do Campo:** `pushinpay_token`
+    * **Tipo de Campo:** Texto (Text)
+* **Preencha esta variável** com o token `Bearer` da API da Pushin Pay da *sua conta* (ex: `Bearer SEU_TOKEN_DA_PUSHINPAY_AQUI`).
+
+### Passo 2: Configurar o Bloco "Gerar PIX com Split"
+
+Este bloco será usado para gerar um PIX via a API do seu provedor SaaS (que já inclui a regra de split de 5% para ele).
+
+* No ManyChat, adicione um bloco de **"Requisição Externa" (External Request)**.
+* **Tipo de Pedido (Request Type):** `POST`
+* **Solicitar URL (Request URL):** ```https://sua-nova-api-flask.up.railway.app/generate_pix_with_split```
+
+* **Cabeçalhos (Headers):**
+    * **Key:** `Content-Type`
+    * **Value:** `application/json`
+    * **Key:** `Authorization`
+    * **Value:** `{{pushinpay_token}}` (Use a variável personalizada que você criou no Passo 1).
+
+* **Corpo da Solicitação (Request Body - JSON):**
+    ```json
+    {
+      "value": {{valor_do_pix}},
+      "webhook_url": "{{webhook_url_de_confirmacao_do_manychat}}"
+    }
+    ```
+    * `{{valor_do_pix}}`: Variável do ManyChat que contém o valor do PIX a ser gerado (ex: `{{custom_field.valor_produto}}`).
+    * `{{webhook_url_de_confirmacao_do_manychat}}`: A URL do webhook do ManyChat do *seu próprio bot* que a Pushin Pay deve chamar quando o PIX for pago. **Esta URL DEVE ser um webhook do ManyChat do seu bot, para que você possa processar a confirmação do pagamento.**
+
+* **Mapeamento de Respostas (Response Mapping):**
+    * **Key:** `qr_code`
+    * **Value:** `data.qr_code`
+    * **Salvar em:** Uma nova variável personalizada do ManyChat (ex: `qr_code_pix`)
+    * **Key:** `id`
+    * **Value:** `data.id`
+    * **Salvar em:** Uma nova variável personalizada do ManyChat (ex: `id_pix`)
+
+### Passo 3: Configurar o Bloco "Puxar Cidade do Lead"
+
+Este bloco permitirá que você obtenha a cidade de um lead usando o `click_id` que foi passado para o seu bot quando o usuário clicou na sua pressel.
+
+* No ManyChat, adicione um bloco de **"Requisição Externa" (External Request)**.
+* **Tipo de Pedido (Request Type):** `GET`
+* **Solicitar URL (Request URL):** ```https://lead-tracker-api-production.up.railway.app/api/getCity?click_id={{click_id_do_lead}}```
+    * `{{click_id_do_lead}}`: Variável do ManyChat que armazena o `click_id` do lead (o `click_id` que seu bot recebeu via o parâmetro `?start=` do Telegram).
+
+* **Cabeçalhos (Headers):** Não são necessários cabeçalhos especiais para esta requisição GET.
+
+* **Corpo da Solicitação (Request Body):** Não é necessário corpo para requisições GET.
+
+* **Mapeamento de Respostas (Response Mapping):**
+    * **Key:** `city`
+    * **Value:** `data.city`
+    * **Salvar em:** Uma nova variável personalizada do ManyChat (ex: `cidade_do_lead`)
+
+### Passo 4: Configurar o Bloco "Confirmar Pagamento (para a Meta API do Provedor SaaS)"
+
+Este bloco permitirá que você informe um pagamento à API do seu provedor SaaS, o que acionará o envio do evento de `Purchase` para o **Pixel da Meta dele** (o provedor SaaS).
+
+* No ManyChat, adicione um bloco de **"Requisição Externa" (External Request)**.
+* **Tipo de Pedido (Request Type):** `POST`
+* **Solicitar URL (Request URL):** ```https://lead-tracker-api-production.up.railway.app/api/confirmPayment```
+
+* **Cabeçalhos (Headers):**
+    * **Key:** `Content-Type`
+    * **Value:** `application/json`
+
+* **Corpo da Solicitação (Request Body):**
+    * Selecione `JSON` como tipo de corpo.
+    * Cole o seguinte JSON. Você precisará substituir `{{click_id_do_lead}}` e `{{valor_do_pagamento}}` pelas variáveis do seu ManyChat.
+        ```json
+        {
+          "click_id": "{{click_id_do_lead}}",
+          "conversion_value": {{valor_do_pagamento}},
+          "secretKey": "12341"
+        }
+        ```
+        * `{{click_id_do_lead}}`: Variável do ManyChat que armazena o `click_id` do lead.
+        * `{{valor_do_pagamento}}`: Variável do ManyChat que armazena o valor do pagamento. **Deve ser um número (sem aspas).**
+        * `SUA_CHAVE_SECRETA_DO_PROVEDOR_SAAS_AQUI`: Esta é a `MANYCHAT_SECRET_KEY` que o seu provedor SaaS configurou na API Node.js dele. **Seu provedor SaaS precisará te fornecer esta chave.**
+
+* **Mapeamento de Respostas (Response Mapping):**
+    * Opcional, mas pode ser útil para depuração:
+        * **Key:** `status_confirm_payment`
+        * **Value:** `data.status`
+        * **Salvar em:** Variável personalizada do ManyChat.
+    
