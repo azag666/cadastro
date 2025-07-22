@@ -1,97 +1,239 @@
-
-## Configurações ManyChat para o seu Bot
-
-Siga estes passos para integrar seu bot do ManyChat com o sistema de rastreamento e geração de PIX.
-
-### Passo 1: Criar uma Variável Personalizada para o Token da Pushin Pay
-
-Crie uma variável para armazenar seu token de autenticação da Pushin Pay.
-
-* No ManyChat, vá em **Configurações (Settings) > Automação (Automation) > Campos Personalizados (Custom Fields)**.
-* Crie um novo campo personalizado:
-    * **Nome do Campo:** `pushinpay_token`
-    * **Tipo de Campo:** Texto (Text)
-* **Preencha esta variável** com o token `Bearer` da API da Pushin Pay da *sua conta* (ex: `Bearer SEU_TOKEN_DA_PUSHINPAY_AQUI`).
-
-### Passo 2: Configurar o Bloco "Gerar PIX com Split"
-
-Este bloco será usado para gerar um PIX via a API do seu provedor SaaS (que já inclui a regra de split de 5% para ele).
-
-* No ManyChat, adicione um bloco de **"Requisição Externa" (External Request)**.
-* **Tipo de Pedido (Request Type):** `POST`
-* **Solicitar URL (Request URL):** ```https://sua-nova-api-flask.up.railway.app/generate_pix_with_split```
-
-* **Cabeçalhos (Headers):**
-    * **Key:** `Content-Type`
-    * **Value:** `application/json`
-    * **Key:** `Authorization`
-    * **Value:** `{{pushinpay_token}}` (Use a variável personalizada que você criou no Passo 1).
-
-* **Corpo da Solicitação (Request Body - JSON):**
-    ```json
-    {
-      "value": {{valor_do_pix}},
-      "webhook_url": "{{webhook_url_de_confirmacao_do_manychat}}"
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboarding de Cliente SaaS - Seu Sistema de Leads</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f0f2f5;
     }
-    ```
-    * `{{valor_do_pix}}`: Variável do ManyChat que contém o valor do PIX a ser gerado (ex: `{{custom_field.valor_produto}}`).
-    * `{{webhook_url_de_confirmacao_do_manychat}}`: A URL do webhook do ManyChat do *seu próprio bot* que a Pushin Pay deve chamar quando o PIX for pago. **Esta URL DEVE ser um webhook do ManyChat do seu bot, para que você possa processar a confirmação do pagamento.**
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+  <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Onboarding de Novo Cliente SaaS</h1>
+    <p class="text-gray-600 mb-8 text-center">Preencha as informações abaixo para configurar o acesso ao nosso sistema de rastreamento de leads e PIX.</p>
 
-* **Mapeamento de Respostas (Response Mapping):**
-    * **Key:** `qr_code`
-    * **Value:** `data.qr_code`
-    * **Salvar em:** Uma nova variável personalizada do ManyChat (ex: `qr_code_pix`)
-    * **Key:** `id`
-    * **Value:** `data.id`
-    * **Salvar em:** Uma nova variável personalizada do ManyChat (ex: `id_pix`)
+    <form id="onboardingForm" class="space-y-6">
+      <div>
+        <label for="client_name" class="block text-sm font-medium text-gray-700 mb-1">Nome do Cliente/Empresa:</label>
+        <input type="text" id="client_name" name="client_name" required
+               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      </div>
+      <div>
+        <label for="telegram_bot_username" class="block text-sm font-medium text-gray-700 mb-1">Username do Bot Telegram (ex: @meubot_bot):</label>
+        <input type="text" id="telegram_bot_username" name="telegram_bot_username" required
+               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      </div>
+      <div>
+        <label for="pushinpay_token" class="block text-sm font-medium text-gray-700 mb-1">Token da PushinPay (ou outro gateway de PIX):</label>
+        <input type="text" id="pushinpay_token" name="pushinpay_token" required
+               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+      </div>
+      <div>
+        <label for="meta_pixel_id" class="block text-sm font-medium text-gray-700 mb-1">ID do Pixel da Meta (Facebook Pixel ID):</label>
+        <input type="text" id="meta_pixel_id" name="meta_pixel_id"
+               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        <p class="mt-1 text-xs text-gray-500">Opcional. Se não fornecido, usaremos o Pixel padrão do SaaS.</p>
+      </div>
+      <div>
+        <label for="meta_conversion_api_token" class="block text-sm font-medium text-gray-700 mb-1">Token da API de Conversões da Meta:</label>
+        <input type="text" id="meta_conversion_api_token" name="meta_conversion_api_token"
+               class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        <p class="mt-1 text-xs text-gray-500">Opcional. Se não fornecido, usaremos o Token padrão do SaaS.</p>
+      </div>
 
-### Passo 3: Configurar o Bloco "Puxar Cidade do Lead"
+      <button type="submit"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+        Onboardar Cliente
+      </button>
+    </form>
 
-Este bloco permitirá que você obtenha a cidade de um lead usando o `click_id` que foi passado para o seu bot quando o usuário clicou na sua pressel.
+    <div id="results" class="mt-8 p-6 bg-gray-50 rounded-md hidden">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Configuração Concluída!</h2>
+      <p class="text-gray-700 mb-2">Seu **Client ID** é: <code class="font-mono bg-yellow-200 p-1 rounded" id="clientIdDisplay"></code></p>
+      <p class="text-gray-700 mb-4">Use este ID para acessar suas configurações personalizadas:</p>
 
-* No ManyChat, adicione um bloco de **"Requisição Externa" (External Request)**.
-* **Tipo de Pedido (Request Type):** `GET`
-* **Solicitar URL (Request URL):** ```https://lead-tracker-api-production.up.railway.app/api/getCity?click_id={{click_id_do_lead}}```
-    * `{{click_id_do_lead}}`: Variável do ManyChat que armazena o `click_id` do lead (o `click_id` que seu bot recebeu via o parâmetro `?start=` do Telegram).
+      <div class="space-y-4">
+        <div>
+          <h3 class="font-semibold text-gray-800">1. Pressel HTML Personalizada:</h3>
+          <p class="text-sm text-gray-600 mb-2">Copie o código abaixo e salve como `index.html` para sua pressel. Ele já contém seu Pixel ID e bot do Telegram.</p>
+          <button id="getPresselHtmlBtn" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out">
+            Obter Código da Pressel HTML
+          </button>
+          <pre id="presselHtmlCode" class="bg-gray-800 text-white p-4 rounded-md mt-2 text-xs overflow-auto max-h-64 hidden"></pre>
+          <button id="copyPresselHtmlBtn" class="mt-2 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out hidden">
+            Copiar Código da Pressel
+          </button>
+        </div>
 
-* **Cabeçalhos (Headers):** Não são necessários cabeçalhos especiais para esta requisição GET.
+        <div>
+          <h3 class="font-semibold text-gray-800">2. Configurações do ManyChat (Fluxos):</h3>
+          <p class="text-sm text-gray-600 mb-2">Siga as instruções abaixo para configurar os blocos de requisição externa no seu ManyChat. Elas já estão personalizadas para você.</p>
+          <button id="getManyChatConfigBtn" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out">
+            Obter Configurações do ManyChat
+          </button>
+          <pre id="manyChatConfigMarkdown" class="bg-gray-800 text-white p-4 rounded-md mt-2 text-xs overflow-auto max-h-64 hidden"></pre>
+          <button id="copyManyChatConfigBtn" class="mt-2 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out hidden">
+            Copiar Configurações do ManyChat
+          </button>
+        </div>
+      </div>
+    </div>
 
-* **Corpo da Solicitação (Request Body):** Não é necessário corpo para requisições GET.
+    <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+      <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+        <p id="messageText" class="text-gray-800 text-lg mb-4"></p>
+        <button id="closeMessageBox" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+          OK
+        </button>
+      </div>
+    </div>
 
-* **Mapeamento de Respostas (Response Mapping):**
-    * **Key:** `city`
-    * **Value:** `data.city`
-    * **Salvar em:** Uma nova variável personalizada do ManyChat (ex: `cidade_do_lead`)
+  </div>
 
-### Passo 4: Configurar o Bloco "Confirmar Pagamento (para a Meta API do Provedor SaaS)"
+  <script>
+    const API_BASE_URL = 'https://lead-tracker-api-production.up.railway.app'; // Sua URL base da API Node.js
+    const onboardingForm = document.getElementById('onboardingForm');
+    const resultsDiv = document.getElementById('results');
+    const clientIdDisplay = document.getElementById('clientIdDisplay');
+    const getPresselHtmlBtn = document.getElementById('getPresselHtmlBtn');
+    const presselHtmlCode = document.getElementById('presselHtmlCode');
+    const copyPresselHtmlBtn = document.getElementById('copyPresselHtmlBtn');
+    const getManyChatConfigBtn = document.getElementById('getManyChatConfigBtn');
+    const manyChatConfigMarkdown = document.getElementById('manyChatConfigMarkdown');
+    const copyManyChatConfigBtn = document.getElementById('copyManyChatConfigBtn');
+    const messageBox = document.getElementById('messageBox');
+    const messageText = document.getElementById('messageText');
+    const closeMessageBox = document.getElementById('closeMessageBox');
 
-Este bloco permitirá que você informe um pagamento à API do seu provedor SaaS, o que acionará o envio do evento de `Purchase` para o **Pixel da Meta dele** (o provedor SaaS).
+    function showMessage(message) {
+      messageText.textContent = message;
+      messageBox.classList.remove('hidden');
+    }
 
-* No ManyChat, adicione um bloco de **"Requisição Externa" (External Request)**.
-* **Tipo de Pedido (Request Type):** `POST`
-* **Solicitar URL (Request URL):** ```https://lead-tracker-api-production.up.railway.app/api/confirmPayment```
+    closeMessageBox.addEventListener('click', () => {
+      messageBox.classList.add('hidden');
+    });
 
-* **Cabeçalhos (Headers):**
-    * **Key:** `Content-Type`
-    * **Value:** `application/json`
+    onboardingForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-* **Corpo da Solicitação (Request Body):**
-    * Selecione `JSON` como tipo de corpo.
-    * Cole o seguinte JSON. Você precisará substituir `{{click_id_do_lead}}` e `{{valor_do_pagamento}}` pelas variáveis do seu ManyChat.
-        ```json
-        {
-          "click_id": "{{click_id_do_lead}}",
-          "conversion_value": {{valor_do_pagamento}},
-          "secretKey": "12341"
+      const formData = new FormData(onboardingForm);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/onboardClient`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.status === 'success') {
+          clientIdDisplay.textContent = result.client_id;
+          resultsDiv.classList.remove('hidden');
+          onboardingForm.reset(); // Limpa o formulário
+          showMessage('Cliente onboardado com sucesso!');
+        } else {
+          showMessage(`Erro ao onboardar cliente: ${result.message || 'Erro desconhecido'}`);
+          console.error('Erro de onboarding:', result);
         }
-        ```
-        * `{{click_id_do_lead}}`: Variável do ManyChat que armazena o `click_id` do lead.
-        * `{{valor_do_pagamento}}`: Variável do ManyChat que armazena o valor do pagamento. **Deve ser um número (sem aspas).**
-        * `SUA_CHAVE_SECRETA_DO_PROVEDOR_SAAS_AQUI`: Esta é a `MANYCHAT_SECRET_KEY` que o seu provedor SaaS configurou na API Node.js dele. **Seu provedor SaaS precisará te fornecer esta chave.**
+      } catch (error) {
+        showMessage(`Erro de rede: ${error.message}`);
+        console.error('Erro de rede ao onboardar:', error);
+      }
+    });
 
-* **Mapeamento de Respostas (Response Mapping):**
-    * Opcional, mas pode ser útil para depuração:
-        * **Key:** `status_confirm_payment`
-        * **Value:** `data.status`
-        * **Salvar em:** Variável personalizada do ManyChat.
-    
+    getPresselHtmlBtn.addEventListener('click', async () => {
+      const clientId = clientIdDisplay.textContent;
+      if (!clientId) {
+        showMessage('Client ID não encontrado. Por favor, onboarde um cliente primeiro.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/getClientPresselHtml?client_id=${clientId}`);
+        const htmlContent = await response.text(); // Recebe como texto/html
+
+        if (response.ok) {
+          presselHtmlCode.textContent = htmlContent;
+          presselHtmlCode.classList.remove('hidden');
+          copyPresselHtmlBtn.classList.remove('hidden');
+        } else {
+          showMessage(`Erro ao obter pressel HTML: ${htmlContent || 'Erro desconhecido'}`);
+          console.error('Erro ao obter pressel HTML:', htmlContent);
+        }
+      } catch (error) {
+        showMessage(`Erro de rede: ${error.message}`);
+        console.error('Erro de rede ao obter pressel HTML:', error);
+      }
+    });
+
+    copyPresselHtmlBtn.addEventListener('click', () => {
+      const textToCopy = presselHtmlCode.textContent;
+      // Usando document.execCommand para compatibilidade em iframes
+      const textarea = document.createElement('textarea');
+      textarea.value = textToCopy;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showMessage('Código da Pressel copiado para a área de transferência!');
+      } catch (err) {
+        console.error('Erro ao copiar texto:', err);
+        showMessage('Falha ao copiar o código. Por favor, selecione e copie manualmente.');
+      }
+      document.body.removeChild(textarea);
+    });
+
+    getManyChatConfigBtn.addEventListener('click', async () => {
+      const clientId = clientIdDisplay.textContent;
+      if (!clientId) {
+        showMessage('Client ID não encontrado. Por favor, onboarde um cliente primeiro.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/getClientManyChatConfig?client_id=${clientId}`);
+        const markdownContent = await response.text(); // Recebe como texto/markdown
+
+        if (response.ok) {
+          manyChatConfigMarkdown.textContent = markdownContent;
+          manyChatConfigMarkdown.classList.remove('hidden');
+          copyManyChatConfigBtn.classList.remove('hidden');
+        } else {
+          showMessage(`Erro ao obter configurações do ManyChat: ${markdownContent || 'Erro desconhecido'}`);
+          console.error('Erro ao obter configurações do ManyChat:', markdownContent);
+        }
+      } catch (error) {
+        showMessage(`Erro de rede: ${error.message}`);
+        console.error('Erro de rede ao obter configurações do ManyChat:', error);
+      }
+    });
+
+    copyManyChatConfigBtn.addEventListener('click', () => {
+      const textToCopy = manyChatConfigMarkdown.textContent;
+      const textarea = document.createElement('textarea');
+      textarea.value = textToCopy;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showMessage('Configurações do ManyChat copiadas para a área de transferência!');
+      } catch (err) {
+        console.error('Erro ao copiar texto:', err);
+        showMessage('Falha ao copiar as configurações. Por favor, selecione e copie manualmente.');
+      }
+      document.body.removeChild(textarea);
+    });
+  </script>
+</body>
+</html>
