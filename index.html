@@ -3,38 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Onboarding de Cliente SaaS - Seu Sistema de Leads</title>
+  <title>Onboarding de Cliente SaaS - Sistema Quantum</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <!-- Font Awesome para ícones de ajuda -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
+    /* Estilos base para um visual dark, futurista */
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #1a202c; /* Fundo escuro */
+      background-color: #0d1117; /* GitHub Dark */
       color: #e2e8f0; /* Texto claro */
+      background-image: radial-gradient(circle at top left, #1f2a37 0%, transparent 50%),
+                        radial-gradient(circle at bottom right, #1f2a37 0%, transparent 50%);
+      background-size: 80% 80%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    h1, h2 {
+      font-family: 'Orbitron', sans-serif; /* Fonte futurista para títulos */
+      text-shadow: 0 0 8px rgba(66, 153, 225, 0.6); /* Efeito de brilho azul */
     }
     .card-bg {
-      background-color: #2d3748; /* Fundo do card mais escuro */
+      background-color: #161b22; /* Fundo do card mais escuro */
+      border: 1px solid #30363d; /* Borda sutil */
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), 0 0 20px rgba(66, 153, 225, 0.2); /* Sombra e brilho */
     }
     .input-field {
-      background-color: #4a5568; /* Fundo dos inputs */
-      border-color: #4a5568; /* Borda dos inputs */
+      background-color: #21262d; /* Fundo dos inputs */
+      border: 1px solid #30363d; /* Borda dos inputs */
       color: #e2e8f0; /* Texto dos inputs */
+      transition: all 0.2s ease-in-out;
     }
     .input-field:focus {
       border-color: #63b3ed; /* Borda ao focar */
-      box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.5); /* Sombra ao focar */
+      box-shadow: 0 0 0 2px rgba(99, 179, 237, 0.4); /* Sombra ao focar */
+      background-color: #2d3748; /* Levemente mais claro ao focar */
     }
     .btn-primary {
-      background-color: #4299e1; /* Azul primário */
-      transition: background-color 0.3s ease;
+      background-image: linear-gradient(to right, #4299e1, #9f7aea); /* Gradiente azul-roxo */
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(66, 153, 225, 0.4);
     }
     .btn-primary:hover {
-      background-color: #3182ce;
+      background-image: linear-gradient(to right, #3182ce, #805ad5);
+      box-shadow: 0 6px 15px rgba(66, 153, 225, 0.6);
+      transform: translateY(-2px);
     }
     .btn-secondary {
-      background-color: #718096; /* Cinza secundário */
+      background-color: #4a5568; /* Cinza secundário */
       transition: background-color 0.3s ease;
     }
     .btn-secondary:hover {
@@ -57,23 +74,54 @@
     .help-icon {
       color: #63b3ed; /* Cor do ícone de ajuda */
       cursor: pointer;
-      transition: color 0.2s ease;
+      transition: color 0.2s ease, transform 0.2s ease;
     }
     .help-icon:hover {
       color: #3182ce;
+      transform: scale(1.1);
     }
     .modal-overlay {
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px); /* Efeito de desfoque de fundo */
     }
     .modal-content {
-      background-color: #2d3748;
+      background-color: #1a202c; /* Fundo do modal mais escuro */
       color: #e2e8f0;
+      border: 1px solid #4a5568;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 30px rgba(99, 179, 237, 0.3);
+    }
+    .tutorial-section {
+      background-color: #1f2a37; /* Fundo da seção de tutorial */
+      border-left: 4px solid #4299e1; /* Borda de destaque */
+    }
+    .tutorial-step {
+      background-color: #2d3748;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #4a5568;
+    }
+    .tutorial-image {
+      border: 1px solid #63b3ed;
+      box-shadow: 0 0 10px rgba(99, 179, 237, 0.5);
+    }
+    /* Estilo para o botão de expandir/contrair */
+    .toggle-button {
+      background-color: #3182ce;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .toggle-button:hover {
+      background-color: #2c5282;
     }
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
   <div class="card-bg p-8 rounded-lg shadow-xl w-full max-w-2xl">
-    <h1 class="text-3xl font-bold text-gray-100 mb-6 text-center">CADASTRO TRACKING</h1>
+    <h1 class="text-3xl font-bold text-gray-100 mb-6 text-center">CADASTRO TRACKING <span class="text-blue-400">| AZAG System</span></h1>
     <p class="text-gray-300 mb-8 text-center">Preencha as informações abaixo para configurar o acesso ao nosso sistema de rastreamento de leads e PIX.</p>
 
     <form id="onboardingForm" class="space-y-6">
@@ -81,7 +129,7 @@
         <label for="client_name" class="block text-sm font-medium text-gray-300 mb-1">Nome do Cliente/Empresa:</label>
         <div class="flex items-center">
           <input type="text" id="client_name" name="client_name" required
-                 class="input-field mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                 class="input-field mt-1 block w-full px-4 py-2 rounded-md shadow-sm focus:ring sm:text-sm">
           <i class="fas fa-info-circle help-icon ml-2" data-tutorial-id="client_name"></i>
         </div>
       </div>
@@ -89,23 +137,24 @@
         <label for="telegram_bot_username" class="block text-sm font-medium text-gray-300 mb-1">Username do Bot Telegram (ex: @meubot_bot):</label>
         <div class="flex items-center">
           <input type="text" id="telegram_bot_username" name="telegram_bot_username" required
-                 class="input-field mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                 class="input-field mt-1 block w-full px-4 py-2 rounded-md shadow-sm focus:ring sm:text-sm">
           <i class="fas fa-info-circle help-icon ml-2" data-tutorial-id="telegram_bot_username"></i>
         </div>
       </div>
       <div class="relative">
-        <label for="pushinpay_token" class="block text-sm font-medium text-gray-300 mb-1">Token da PushinPay (ou outro gateway de PIX):</label>
+        <label for="pushinpay_token" class="block text-sm font-medium text-gray-300 mb-1">Token da PushinPay (do seu cliente):</label>
         <div class="flex items-center">
           <input type="text" id="pushinpay_token" name="pushinpay_token" required
-                 class="input-field mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                 class="input-field mt-1 block w-full px-4 py-2 rounded-md shadow-sm focus:ring sm:text-sm">
           <i class="fas fa-info-circle help-icon ml-2" data-tutorial-id="pushinpay_token"></i>
         </div>
+        <p class="mt-1 text-xs text-gray-400">Este é o token de API do seu cliente na PushinPay. Ele será usado para gerar os PIX na conta dele.</p>
       </div>
       <div class="relative">
         <label for="meta_pixel_id" class="block text-sm font-medium text-gray-300 mb-1">ID do Pixel da Meta (Facebook Pixel ID):</label>
         <div class="flex items-center">
           <input type="text" id="meta_pixel_id" name="meta_pixel_id" required
-                 class="input-field mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                 class="input-field mt-1 block w-full px-4 py-2 rounded-md shadow-sm focus:ring sm:text-sm">
           <i class="fas fa-info-circle help-icon ml-2" data-tutorial-id="meta_pixel_id"></i>
         </div>
         <p class="mt-1 text-xs text-gray-400">Este campo é obrigatório.</p>
@@ -114,20 +163,20 @@
         <label for="meta_conversion_api_token" class="block text-sm font-medium text-gray-300 mb-1">Token da API de Conversões da Meta:</label>
         <div class="flex items-center">
           <input type="text" id="meta_conversion_api_token" name="meta_conversion_api_token" required
-                 class="input-field mt-1 block w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                 class="input-field mt-1 block w-full px-4 py-2 rounded-md shadow-sm focus:ring sm:text-sm">
           <i class="fas fa-info-circle help-icon ml-2" data-tutorial-id="meta_conversion_api_token"></i>
         </div>
         <p class="mt-1 text-xs text-gray-400">Este campo é obrigatório.</p>
       </div>
 
       <button type="submit"
-              class="btn-primary w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
-        Onboardar Cliente
+              class="btn-primary w-full flex justify-center py-3 px-4 rounded-md shadow-lg text-lg font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+        <i class="fas fa-rocket mr-2"></i> Onboardar Cliente
       </button>
     </form>
 
     <div id="results" class="mt-8 p-6 card-bg rounded-md hidden border border-gray-700">
-      <h2 class="text-2xl font-bold text-gray-100 mb-4 text-center">Configuração Concluída!</h2>
+      <h2 class="text-2xl font-bold text-gray-100 mb-4 text-center">Configuração Concluída! <i class="fas fa-check-circle text-green-500 ml-2"></i></h2>
       <p class="text-gray-300 mb-2">Seu **Client ID** é: <code class="font-mono bg-yellow-700 text-yellow-100 p-1 rounded" id="clientIdDisplay"></code></p>
       <p class="text-gray-300 mb-4">Use este ID para acessar suas configurações personalizadas:</p>
 
@@ -135,30 +184,107 @@
         <div>
           <h3 class="font-semibold text-gray-100">1. Pressel HTML Personalizada:</h3>
           <p class="text-sm text-gray-400 mb-2">Copie o código abaixo e salve como `index.html` para sua pressel. Ele já contém seu Pixel ID e bot do Telegram.</p>
-          <button id="getPresselHtmlBtn" class="btn-success w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out">
-            Obter Código da Pressel HTML
+          <button id="getPresselHtmlBtn" class="btn-success w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out">
+            <i class="fas fa-code mr-2"></i> Obter Código da Pressel HTML
           </button>
           <pre id="presselHtmlCode" class="bg-gray-900 text-green-300 p-4 rounded-md mt-2 text-xs overflow-auto max-h-64 hidden border border-gray-700"></pre>
-          <button id="copyPresselHtmlBtn" class="btn-secondary mt-2 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out hidden">
-            Copiar Código da Pressel
+          <button id="copyPresselHtmlBtn" class="btn-secondary mt-2 w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out hidden">
+            <i class="fas fa-copy mr-2"></i> Copiar Código da Pressel
           </button>
         </div>
 
         <div>
           <h3 class="font-semibold text-gray-100">2. Configurações do ManyChat (Fluxos):</h3>
           <p class="text-sm text-gray-400 mb-2">Siga as instruções abaixo para configurar os blocos de requisição externa no seu ManyChat. Elas já estão personalizadas para você.</p>
-          <button id="getManyChatConfigBtn" class="btn-info w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out">
-            Obter Configurações do ManyChat
+          <button id="getManyChatConfigBtn" class="btn-info w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out">
+            <i class="fas fa-robot mr-2"></i> Obter Configurações do ManyChat
           </button>
           <pre id="manyChatConfigMarkdown" class="bg-gray-900 text-purple-300 p-4 rounded-md mt-2 text-xs overflow-auto max-h-64 hidden border border-gray-700"></pre>
-          <button id="copyManyChatConfigBtn" class="btn-secondary mt-2 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out hidden">
-            Copiar Configurações do ManyChat
+          <button id="copyManyChatConfigBtn" class="btn-secondary mt-2 w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out hidden">
+            <i class="fas fa-copy mr-2"></i> Copiar Configurações do ManyChat
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Modal para Tutoriais -->
+    <!-- Seção de Tutorial Visual -->
+    <div class="mt-10 p-6 tutorial-section rounded-lg shadow-xl">
+        <h2 class="text-2xl font-bold text-gray-100 mb-4 text-center">Guia Visual: Onde Encontrar os Códigos <i class="fas fa-lightbulb text-yellow-400 ml-2"></i></h2>
+        <p class="text-gray-300 mb-6 text-center">Este tutorial irá guiá-lo passo a passo para encontrar as informações necessárias para o cadastro.</p>
+        
+        <button id="toggleTutorial" class="toggle-button w-full mb-6">
+            <i class="fas fa-chevron-down mr-2"></i> Expandir Tutorial
+        </button>
+
+        <div id="tutorialContent" class="hidden space-y-8">
+            <!-- Tutorial para Nome do Cliente/Empresa -->
+            <div class="tutorial-step">
+                <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-building mr-2 text-blue-400"></i> Nome do Cliente/Empresa</h3>
+                <p class="text-gray-300 mb-4">Este é o nome da sua empresa ou do cliente que você está onboardando. É um campo de texto livre para sua identificação interna.</p>
+                <img src="https://placehold.co/600x200/1e293b/a78bfa?text=Nome+da+Sua+Empresa+Aqui" alt="Exemplo de Nome da Empresa" class="w-full h-auto rounded-md tutorial-image mb-4">
+                <p class="text-sm text-gray-400">**Onde Encontrar:** Basta digitar o nome que você deseja usar para identificar o cliente no sistema.</p>
+            </div>
+
+            <!-- Tutorial para Username do Bot Telegram -->
+            <div class="tutorial-step">
+                <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fab fa-telegram-plane mr-2 text-blue-400"></i> Username do Bot Telegram</h3>
+                <p class="text-gray-300 mb-4">O username do seu bot no Telegram é crucial para que a pressel possa redirecionar os usuários para o bot correto.</p>
+                <img src="https://placehold.co/600x300/1e293b/a78bfa?text=BotFather+-+Seu+Bot+Username" alt="Exemplo de Username do Bot Telegram" class="w-full h-auto rounded-md tutorial-image mb-4">
+                <p class="text-sm text-gray-400">**Onde Encontrar:**</p>
+                <ol class="list-decimal list-inside text-gray-300 text-sm">
+                    <li>Abra o Telegram e procure por **@BotFather**.</li>
+                    <li>Inicie uma conversa e digite `/mybots`.</li>
+                    <li>Selecione o bot que você deseja usar.</li>
+                    <li>O BotFather mostrará as informações do seu bot, incluindo o **Username** (ex: `@meubot_bot`). Copie este valor.</li>
+                </ol>
+            </div>
+
+            <!-- Tutorial para Token da PushinPay -->
+            <div class="tutorial-step">
+                <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-coins mr-2 text-blue-400"></i> Token da PushinPay (do seu cliente)</h3>
+                <p class="text-gray-300 mb-4">Este é o token de autenticação da API do seu cliente na PushinPay. Ele permite que nossa API gere PIX diretamente na conta do seu cliente.</p>
+                <img src="https://placehold.co/600x300/1e293b/a78bfa?text=PushinPay+Dashboard+-+Configuracoes+API" alt="Exemplo de Token da PushinPay" class="w-full h-auto rounded-md tutorial-image mb-4">
+                <p class="text-sm text-gray-400">**Onde Encontrar:**</p>
+                <ol class="list-decimal list-inside text-gray-300 text-sm">
+                    <li>Acesse o painel da PushinPay do seu cliente.</li>
+                    <li>Procure por seções como "Configurações", "API", "Chaves de Acesso" ou "Desenvolvedores".</li>
+                    <li>O token de API geralmente é uma string longa (ex: "sk_live_XXXXXXXXXXXXXXXXXXXX"). **Copie o token de API secreto.**</li>
+                    <li>**Importante:** Este token é sensível. Não o compartilhe publicamente.</li>
+                </ol>
+            </div>
+
+            <!-- Tutorial para ID do Pixel da Meta -->
+            <div class="tutorial-step">
+                <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fab fa-facebook-f mr-2 text-blue-400"></i> ID do Pixel da Meta (Facebook Pixel ID)</h3>
+                <p class="text-gray-300 mb-4">O ID do Pixel da Meta é usado para rastrear eventos no navegador e para a API de Conversões, garantindo o monitoramento de suas campanhas.</p>
+                <img src="https://placehold.co/600x300/1e293b/a78bfa?text=Meta+Business+Manager+-+ID+do+Pixel" alt="Exemplo de ID do Pixel da Meta" class="w-full h-auto rounded-md tutorial-image mb-4">
+                <p class="text-sm text-gray-400">**Onde Encontrar:**</p>
+                <ol class="list-decimal list-inside text-gray-300 text-sm">
+                    <li>Acesse o <a href="https://business.facebook.com/" target="_blank" class="text-blue-400 hover:underline">Meta Business Manager</a>.</li>
+                    <li>Vá para **Gerenciador de Eventos**.</li>
+                    <li>Selecione a conta de anúncios e o Pixel que você deseja usar.</li>
+                    <li>O **ID do Pixel** é um número que geralmente aparece no canto superior esquerdo ou nas configurações do Pixel. Copie este número.</li>
+                </ol>
+            </div>
+
+            <!-- Tutorial para Token da API de Conversões da Meta -->
+            <div class="tutorial-step">
+                <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-key mr-2 text-blue-400"></i> Token da API de Conversões da Meta</h3>
+                <p class="text-gray-300 mb-4">Este token é essencial para enviar eventos de servidor para o Facebook, melhorando a precisão do rastreamento de suas conversões.</p>
+                <img src="https://placehold.co/600x300/1e293b/a78bfa?text=Meta+Business+Manager+-+Gerar+Token+API" alt="Exemplo de Token da API de Conversões da Meta" class="w-full h-auto rounded-md tutorial-image mb-4">
+                <p class="text-sm text-gray-400">**Onde Encontrar:**</p>
+                <ol class="list-decimal list-inside text-gray-300 text-sm">
+                    <li>No **Gerenciador de Eventos** da Meta, selecione seu Pixel.</li>
+                    <li>Vá para a aba **Configurações**.</li>
+                    <li>Role para baixo até a seção **API de Conversões**.</li>
+                    <li>Clique em **"Gerar Token de Acesso"** ou "Gerar token de acesso". Copie o token gerado.</li>
+                    <li>**Importante:** Este token é sensível e deve ser tratado como uma senha.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Tutoriais (mantido para compatibilidade, mas o tutorial visual é o principal) -->
     <div id="tutorialModal" class="fixed inset-0 modal-overlay flex items-center justify-center hidden z-50">
       <div class="modal-content p-6 rounded-lg shadow-xl max-w-lg w-full text-center">
         <h3 id="tutorialTitle" class="text-xl font-bold text-gray-100 mb-4"></h3>
@@ -171,9 +297,9 @@
 
     <!-- Message Box (mantido para mensagens de sucesso/erro) -->
     <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-40">
-      <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
-        <p id="messageText" class="text-gray-800 text-lg mb-4"></p>
-        <button id="closeMessageBox" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+      <div class="bg-gray-800 p-6 rounded-lg shadow-xl max-w-sm w-full text-center border border-gray-700">
+        <p id="messageText" class="text-gray-200 text-lg mb-4"></p>
+        <button id="closeMessageBox" class="btn-primary py-2 px-4 rounded">
           OK
         </button>
       </div>
@@ -196,14 +322,18 @@
     const messageText = document.getElementById('messageText');
     const closeMessageBox = document.getElementById('closeMessageBox');
 
-    // Elementos do Modal de Tutorial
+    // Elementos do Modal de Tutorial (para ícones de ajuda individuais)
     const tutorialModal = document.getElementById('tutorialModal');
     const tutorialTitle = document.getElementById('tutorialTitle');
     const tutorialText = document.getElementById('tutorialText');
     const closeTutorialModal = document.getElementById('closeTutorialModal');
     const helpIcons = document.querySelectorAll('.help-icon');
 
-    // Conteúdo dos Tutoriais
+    // Elementos da Seção de Tutorial Visual
+    const toggleTutorialButton = document.getElementById('toggleTutorial');
+    const tutorialContentDiv = document.getElementById('tutorialContent');
+
+    // Conteúdo dos Tutoriais (para os modais de ajuda individuais)
     const tutorials = {
       client_name: {
         title: "Nome do Cliente/Empresa",
@@ -214,8 +344,8 @@
         text: "Vá para o BotFather no Telegram, crie ou selecione seu bot, e copie o 'Username' dele (ex: @meubot_bot). Este username será usado na pressel para redirecionar usuários para o bot correto."
       },
       pushinpay_token: {
-        title: "Token da PushinPay (ou outro gateway de PIX)",
-        text: "Obtenha o token de autenticação da API do seu gateway de pagamento principal (ex: PushinPay, Oasyfy, etc.). Geralmente, é um token 'Bearer' ou uma chave de API secreta fornecida no painel do provedor. Este token será usado para gerar PIX."
+        title: "Token da PushinPay (do seu cliente)",
+        text: "Obtenha o token de autenticação da API do seu cliente na PushinPay. Geralmente, é um token 'Bearer' ou uma chave de API secreta fornecida no painel do provedor. Este token será usado para gerar PIX."
       },
       meta_pixel_id: {
         title: "ID do Pixel da Meta (Facebook Pixel ID)",
@@ -236,7 +366,7 @@
       messageBox.classList.add('hidden');
     });
 
-    // Lógica para abrir o modal de tutorial
+    // Lógica para abrir o modal de tutorial individual
     helpIcons.forEach(icon => {
       icon.addEventListener('click', (e) => {
         const tutorialId = e.target.dataset.tutorialId;
@@ -249,10 +379,22 @@
       });
     });
 
-    // Lógica para fechar o modal de tutorial
+    // Lógica para fechar o modal de tutorial individual
     closeTutorialModal.addEventListener('click', () => {
       tutorialModal.classList.add('hidden');
     });
+
+    // Lógica para expandir/contrair a seção de tutorial visual
+    toggleTutorialButton.addEventListener('click', () => {
+        if (tutorialContentDiv.classList.contains('hidden')) {
+            tutorialContentDiv.classList.remove('hidden');
+            toggleTutorialButton.innerHTML = '<i class="fas fa-chevron-up mr-2"></i> Contrair Tutorial';
+        } else {
+            tutorialContentDiv.classList.add('hidden');
+            toggleTutorialButton.innerHTML = '<i class="fas fa-chevron-down mr-2"></i> Expandir Tutorial';
+        }
+    });
+
 
     onboardingForm.addEventListener('submit', async (e) => {
       e.preventDefault();
