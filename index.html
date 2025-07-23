@@ -199,23 +199,6 @@
             transform: translateY(-3px) scale(1.01);
         }
 
-        /* Estilos para o messageBox (pop-up de mensagem) */
-        #messageBox .modal-content {
-            background-color: #1a202c;
-            border: 2px solid #00e6e6;
-            box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
-            border-radius: 1.5rem;
-            padding: 2rem;
-        }
-        #messageBox .btn-primary {
-            background-image: linear-gradient(to right, #00e6e6, #00aaff);
-            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.4);
-        }
-        #messageBox .btn-primary:hover {
-            background-image: linear-gradient(to right, #00cccc, #0099e6);
-            box-shadow: 0 6px 20px rgba(0, 255, 255, 0.6);
-        }
-
         /* Para telas menores */
         @media (max-width: 768px) {
             .card-bg {
@@ -317,7 +300,6 @@
         </div>
 
         <!-- Seção de Tutorial Visual para Configuração do ManyChat -->
-        <!-- Adicionada a classe 'hidden' à div principal 'tutorial-section' -->
         <div id="tutorialSection" class="mt-10 p-6 tutorial-section rounded-lg shadow-xl hidden">
             <h2 class="text-2xl font-bold text-gray-100 mb-4 text-center">Guia de Configuração no ManyChat <i class="fas fa-robot text-blue-400 ml-2"></i></h2>
             <p class="text-gray-300 mb-6 text-center">Siga este passo a passo para configurar corretamente seu ManyChat e integrar com o AZAG System.</p>
@@ -327,25 +309,10 @@
             </button>
 
             <div id="tutorialContent" class="hidden space-y-8">
-                <!-- Passo 1: Campos Personalizados -->
+                <!-- Passo 1: Configurar Requisições/Ações -->
                 <div class="tutorial-step">
-                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-user-tag mr-2 text-blue-400"></i> 1. Criar Campos Personalizados do Usuário</h3>
-                    <p class="text-gray-300 mb-4">No seu ManyChat, vá em <code class="bg-gray-700 p-1 rounded">Settings > Custom Fields</code> e crie os seguintes campos de usuário, se ainda não existirem:</p>
-                    <ul class="list-disc list-inside text-gray-300 text-sm space-y-2 mb-4">
-                        <li>**valor em reais**: Tipo **Number**</li>
-                        <li>**valor da venda**: Tipo **Number**</li>
-                        <li>**$.id**: Tipo **Text**</li>
-                        <li>**$.qr_code**: Tipo **Text**</li>
-                        <li>**$.status**: Tipo **Text**</li>
-                    </ul>
-                    <img src="https://placehold.co/600x250/1e293b/a78bfa?text=Exemplo+Campos+Personalizados+ManyChat" alt="[Imagem de Exemplo de Campos Personalizados no ManyChat]" class="w-full h-auto rounded-md tutorial-image mb-4">
-                    <p class="text-sm text-gray-400">**Importante:** Certifique-se de que os nomes dos campos correspondam exatamente como listado, incluindo o `$`. (Se o Manychat não permitir `$.`, use apenas `id`, `qr_code`, `status` e ajuste nas requisições).</p>
-                </div>
-
-                <!-- Passo 2: Criar Requisições/Ações -->
-                <div class="tutorial-step">
-                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-exchange-alt mr-2 text-blue-400"></i> 2. Configurar Requisições de API no ManyChat</h3>
-                    <p class="text-gray-300 mb-4">Para cada requisição abaixo, clique no botão "Copiar Fluxo" para importar o bloco direto para seu ManyChat. Você precisará revisar e ajustar os campos **`click_id`** e os campos personalizados criados no passo anterior.</p>
+                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-exchange-alt mr-2 text-blue-400"></i> 1. Configurar Requisições de API no ManyChat</h3>
+                    <p class="text-gray-300 mb-4">Para cada requisição abaixo, clique no botão "Copiar Fluxo" para importar o bloco direto para seu ManyChat. Você precisará revisar e ajustar os campos **`click_id`** e os campos personalizados criados no passo seguinte.</p>
                     
                     <!-- Requisição: Ajustar Valor PIX -->
                     <div class="bg-gray-800 p-4 rounded-md mb-6 border border-gray-700">
@@ -405,16 +372,23 @@
                         <p class="text-sm text-gray-500">Certifique-se de que <code class="bg-gray-700 p-1 rounded">click_id</code> e <code class="bg-gray-700 p-1 rounded">valor em reais</code> são os campos personalizados do ManyChat.</p>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Message Box (pop-up de mensagem) -->
-        <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-40">
-            <div class="modal-content p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
-                <p id="messageText" class="text-gray-200 text-lg mb-4"></p>
-                <button id="closeMessageBox" class="btn-primary py-2 px-4 rounded">
-                    OK
-                </button>
+                <!-- Nova posição para Campos Personalizados com imagem atualizada -->
+                <div class="tutorial-step">
+                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-user-tag mr-2 text-blue-400"></i> 1.1. Campos Personalizados do Usuário (Verificação)</h3>
+                    <p class="text-gray-300 mb-4">Ao importar os fluxos acima, o ManyChat geralmente cria automaticamente os campos personalizados necessários. Você verá algo parecido com a imagem abaixo nos seus campos salvos, dentro de <code class="bg-gray-700 p-1 rounded">Settings > Custom Fields</code>:</p>
+                    <img src="https://i.postimg.cc/1zZzzsMn/Captura-de-Tela-2025-07-23-a-s-19-03-53.png" alt="[Imagem de Campos Personalizados ManyChat Salvos]" class="w-full h-auto rounded-md tutorial-image mb-4">
+                    <p class="text-xs text-gray-500 mb-2">Captura de Tela 2025-07-23 às 19.03.53.png</p>
+                    <p class="text-gray-300 mb-4">Caso algum dos campos abaixo não tenha sido criado automaticamente, você deverá criá-lo manualmente com o tipo especificado:</p>
+                    <ul class="list-disc list-inside text-gray-300 text-sm space-y-2 mb-4">
+                        <li>**valor em reais**: Tipo **Number**</li>
+                        <li>**valor da venda**: Tipo **Number**</li>
+                        <li>**$.id**: Tipo **Text**</li>
+                        <li>**$.qr_code**: Tipo **Text**</li>
+                        <li>**$.status**: Tipo **Text**</li>
+                    </ul>
+                    <p class="text-sm text-gray-400">**Importante:** Certifique-se de que os nomes dos campos correspondam exatamente como listado, incluindo o `$`. (Se o Manychat não permitir `$.`, use apenas `id`, `qr_code`, `status` e ajuste nas requisições).</p>
+                </div>
             </div>
         </div>
 
@@ -428,25 +402,11 @@
         const getPresselHtmlBtn = document.getElementById('getPresselHtmlBtn');
         const presselHtmlCode = document.getElementById('presselHtmlCode');
         const copyPresselHtmlBtn = document.getElementById('copyPresselHtmlBtn');
-        const messageBox = document.getElementById('messageBox');
-        const messageText = document.getElementById('messageText');
-        const closeMessageBox = document.getElementById('closeMessageBox');
-
+        
         // Elementos da Seção de Tutorial Visual
-        const tutorialSection = document.getElementById('tutorialSection'); // Nova referência
+        const tutorialSection = document.getElementById('tutorialSection'); 
         const toggleTutorialButton = document.getElementById('toggleTutorial');
         const tutorialContentDiv = document.getElementById('tutorialContent');
-
-        // Função para exibir mensagens
-        function showMessage(message) {
-            messageText.textContent = message;
-            messageBox.classList.remove('hidden');
-        }
-
-        // Event listener para fechar a caixa de mensagem
-        closeMessageBox.addEventListener('click', () => {
-            messageBox.classList.add('hidden');
-        });
 
         // Lógica para expandir/contrair a seção de tutorial visual
         toggleTutorialButton.addEventListener('click', () => {
@@ -479,22 +439,24 @@
 
                 if (response.ok && result.status === 'success') {
                     clientIdDisplay.textContent = result.client_id;
-                    resultsDiv.classList.remove('hidden');
-                    onboardingForm.reset(); // Limpa o formulário
-                    showMessage('Cliente onboardado com sucesso! Agora configure seu ManyChat.');
                     
-                    // Mostra a seção principal do tutorial e expande o conteúdo
-                    tutorialSection.classList.remove('hidden'); // Mostra a seção principal
-                    tutorialContentDiv.classList.remove('hidden');
+                    // Oculta o formulário de onboarding
+                    onboardingForm.classList.add('hidden'); 
+
+                    // Mostra a seção de resultados e o guia do ManyChat
+                    resultsDiv.classList.remove('hidden');
+                    tutorialSection.classList.remove('hidden'); 
+                    tutorialContentDiv.classList.remove('hidden'); // Garante que o conteúdo do tutorial esteja expandido
                     toggleTutorialButton.innerHTML = '<i class="fas fa-chevron-up mr-2"></i> Contrair Guia de Configuração';
 
                 } else {
-                    showMessage(`Erro ao onboardar cliente: ${result.message || 'Erro desconhecido'}`);
-                    console.error('Erro de onboarding:', result);
+                    // Se houver erro, pode-se adicionar uma mensagem de erro na UI ou no console
+                    console.error(`Erro ao onboardar cliente: ${result.message || 'Erro desconhecido'}`);
+                    alert(`Erro ao onboardar cliente: ${result.message || 'Erro desconhecido'}`); // Mantido para feedback visual em caso de erro
                 }
             } catch (error) {
-                showMessage(`Erro de rede: ${error.message}`);
-                console.error('Erro de rede ao onboardar:', error);
+                console.error(`Erro de rede: ${error.message}`);
+                alert(`Erro de rede: ${error.message}`); // Mantido para feedback visual em caso de erro
             }
         });
 
@@ -502,7 +464,7 @@
         getPresselHtmlBtn.addEventListener('click', async () => {
             const clientId = clientIdDisplay.textContent;
             if (!clientId) {
-                showMessage('Client ID não encontrado. Por favor, onboarde um cliente primeiro.');
+                alert('Client ID não encontrado. Por favor, onboarde um cliente primeiro.'); // Usando alert temporariamente para feedback
                 return;
             }
 
@@ -515,11 +477,11 @@
                     presselHtmlCode.classList.remove('hidden');
                     copyPresselHtmlBtn.classList.remove('hidden');
                 } else {
-                    showMessage(`Erro ao obter pressel HTML: ${htmlContent || 'Erro desconhecido'}`);
+                    alert(`Erro ao obter pressel HTML: ${htmlContent || 'Erro desconhecido'}`); // Usando alert temporariamente para feedback
                     console.error('Erro ao obter pressel HTML:', htmlContent);
                 }
             } catch (error) {
-                showMessage(`Erro de rede: ${error.message}`);
+                alert(`Erro de rede: ${error.message}`); // Usando alert temporariamente para feedback
                 console.error('Erro de rede ao obter pressel HTML:', error);
             }
         });
@@ -533,10 +495,10 @@
             textarea.select();
             try {
                 document.execCommand('copy');
-                showMessage('Código da Pressel copiado para a área de transferência!');
+                alert('Código da Pressel copiado para a área de transferência!'); // Usando alert temporariamente para feedback
             } catch (err) {
                 console.error('Erro ao copiar texto:', err);
-                showMessage('Falha ao copiar o código. Por favor, selecione e copie manualmente.');
+                alert('Falha ao copiar o código. Por favor, selecione e copie manualmente.'); // Usando alert temporariamente para feedback
             }
             document.body.removeChild(textarea);
         });
