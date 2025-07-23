@@ -464,25 +464,7 @@
                     <p class="text-sm text-gray-400 mb-2">Siga as instruções abaixo para configurar os blocos de requisição externa no seu ManyChat. Elas já estão personalizadas para você.</p>
                 </div>
             </div>
-
-            <!-- NOVA SEÇÃO: OFERTA DO PLANO PRO (Ainda dentro de results, mas será ocultada/exibida conforme o fluxo) -->
-            <div class="pro-offer-section mt-8 p-6 rounded-md">
-                <h3 class="text-2xl font-bold text-center mb-4">Turbine Seus Resultados com o Plano PRO!</h3>
-                <p class="text-gray-300 text-center mb-6">Desbloqueie o poder máximo do AZAG System e escale suas vendas pagando apenas <strong class="text-yellow-300">R$ 0,75 por venda</strong> confirmada!</p>
-                <ul class="list-disc list-inside text-gray-200 space-y-2 mb-6">
-                    <li><i class="fas fa-chart-line text-purple-400 mr-2"></i> **Dashboard Inteligente:** Visão completa e em tempo real das suas métricas de vendas e PIX.</li>
-                    <li><i class="fas fa-cogs text-purple-400 mr-2"></i> **Requisições Especiais:** APIs avançadas para otimizar seus fluxos e integrações.</li>
-                    <li><i class="fas fa-robot text-purple-400 mr-2"></i> **Fluxos Prontos ManyChat:** Templates de funis de alta conversão prontos para importar.</li>
-                    <li><i class="fas fa-mask text-purple-400 mr-2"></i> **Pressel com Cloaker:** Proteja seus links e garanta a integridade do seu tráfego.</li>
-                    <li><i class="fas fa-layer-group text-purple-400 mr-2"></i> **Múltiplos Bots:** Gerencie diversas operações com bots ilimitados.</li>
-                    <li><i class="fas fa-pixel text-purple-400 mr-2"></i> **Múltiplos Pixels:** Rastreie e otimize campanhas com pixels ilimitados.</li>
-                </ul>
-                <button id="contractProBtn" class="btn-primary w-full flex justify-center py-3 px-4 rounded-md shadow-lg text-lg font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out">
-                    <i class="fas fa-crown mr-2"></i> Contratar Plano PRO
-                </button>
-            </div>
-            <!-- FIM DA NOVA SEÇÃO -->
-
+            <!-- A seção PRO-OFFER-SECTION foi removida daqui, conforme solicitado. -->
         </div>
 
         <!-- Seção de Tutorial Visual para Configuração do ManyChat -->
@@ -618,8 +600,8 @@
         const getPresselHtmlBtn = document.getElementById('getPresselHtmlBtn');
         const presselHtmlCode = document.getElementById('presselHtmlCode');
         const copyPresselHtmlBtn = document.getElementById('copyPresselHtmlBtn');
-        const contractProBtn = document.getElementById('contractProBtn'); 
-        
+        // const contractProBtn = document.getElementById('contractProBtn'); // Removido, pois a seção PRO foi movida
+
         // Elementos da Seção de Tutorial ManyChat
         const tutorialSection = document.getElementById('tutorialSection'); 
         const toggleTutorialButton = document.getElementById('toggleTutorial');
@@ -701,14 +683,6 @@
             } catch (error) {
                 console.error(`Erro de rede: ${error.message}`);
             }
-        });
-
-        // Lógica para o botão "Contratar Plano PRO" (dentro da seção de resultados do FREE)
-        contractProBtn.addEventListener('click', () => {
-            console.log('Botão Contratar Plano PRO clicado!');
-            alert('Parabéns! Você está a um passo de turbinar seus resultados com o Plano PRO. Em breve, entraremos em contato para finalizar a contratação e liberar todos os recursos avançados!');
-            // Você pode redirecionar para uma página de checkout ou um formulário de contato aqui
-            // window.location.href = 'URL_DO_SEU_CHECKOUT_PRO';
         });
 
         // Lógica para obter e copiar o código HTML da Pressel
