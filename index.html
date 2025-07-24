@@ -399,26 +399,26 @@
 
         <form id="onboardingForm" class="space-y-6">
             <div class="relative">
-                <label for="client_name" class="block text-sm font-medium text-gray-300 mb-1">Nome do Cliente/Empresa:</label>
+                <label for="client_name" class="block text-sm font-medium text-gray-300 mb-1">SEU NOME OU APELIDO:</label>
                 <div class="flex items-center">
                     <input type="text" id="client_name" name="client_name" required
                            class="input-field mt-1 block w-full px-4 py-2 rounded-md shadow-sm focus:ring sm:text-sm">
                 </div>
             </div>
             <div class="relative">
-                <label for="telegram_bot_username" class="block text-sm font-medium text-gray-300 mb-1">Username do Bot Telegram (ex: @meubot_bot):</label>
+                <label for="telegram_bot_username" class="block text-sm font-medium text-gray-300 mb-1">Username do Bot Telegram (ex: meubot_bot): "NÃO INCLUA O @"</label>
                 <div class="flex items-center">
                     <input type="text" id="telegram_bot_username" name="telegram_bot_username" required
                            class="input-field mt-1 block w-full px-4 py-2 rounded-md shadow-sm focus:ring sm:text-sm">
                 </div>
             </div>
             <div class="relative">
-                <label for="pushinpay_token" class="block text-sm font-medium text-gray-300 mb-1">Token da PushinPay (do seu cliente):</label>
+                <label for="pushinpay_token" class="block text-sm font-medium text-gray-300 mb-1">Token da PushinPay:</label>
                 <div class="flex items-center">
                     <input type="text" id="pushinpay_token" name="pushinpay_token" required
                            class="input-field mt-1 block w-full px-4 py-2 rounded-md shadow-sm focus:ring sm:text-sm">
                 </div>
-                <p class="mt-1 text-xs text-gray-400">Este é o token de API do seu cliente na PushinPay. Ele será usado para gerar os PIX na conta dele.</p>
+                <p class="mt-1 text-xs text-gray-400">. Ele será usado futuramente.</p>
             </div>
             <div class="relative">
                 <label for="meta_pixel_id" class="block text-sm font-medium text-gray-300 mb-1">ID do Pixel da Meta (Facebook Pixel ID):</label>
@@ -478,10 +478,41 @@
             </button>
 
             <div id="tutorialContent" class="hidden space-y-8">
-                <!-- Passo 1: Importar o Fluxo Completo -->
+                <!-- Passo 1: Configuração do Gatilho (Trigger) -->
                 <div class="tutorial-step">
-                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-download mr-2 text-blue-400"></i> 1. Importe o Fluxo Completo AZAG System no ManyChat</h3>
-                    <p class="text-gray-300 mb-4">Para facilitar sua integração, criamos um fluxo único que contém todas as requisições e ações necessárias para o AZAG System. Clique no botão abaixo para importar este fluxo diretamente para o seu ManyChat:</p>
+                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-play-circle mr-2 text-blue-400"></i> 1. Configure o Gatilho (Trigger) do seu Fluxo</h3>
+                    <p class="text-gray-300 mb-4">O gatilho é o que "inicia" seu fluxo no ManyChat. Para que o AZAG System funcione corretamente com o Telegram, o gatilho deve ser configurado para quando o usuário optar pelo Telegram. Siga a imagem abaixo para configurar exatamente:</p>
+                    <img src="https://i.postimg.cc/Wb890Yz8/Captura-de-Tela-2025-07-24-a-s-04-21-58.png" alt="" class="w-full h-auto rounded-md tutorial-image mb-4">
+                    <p class="text-xs text-gray-500 mb-2">Captura de Tela 2025-07-24 às 04:21:58.png</p>
+                    <ul class="list-disc list-inside text-gray-300 text-sm space-y-2 mb-4">
+                        <li>No ManyChat, crie um novo fluxo ou edite um existente.</li>
+                        <li>Clique em "Add Trigger" (Adicionar Gatilho).</li>
+                        <li>Escolha a opção "User Custom Field" (Campo Personalizado do Usuário).</li>
+                        <li>Selecione o campo do sistema: **`Telegram Opt-in`**</li>
+                        <li>Defina a condição como: **`is True`** (é Verdadeiro).</li>
+                    </ul>
+                    <p class="text-gray-400 text-sm mt-3">Isso fará com que seu fluxo seja ativado sempre que um usuário confirmar a opção de receber mensagens pelo Telegram.</p>
+                </div>
+
+                <!-- Passo 2: Definir o Click ID com a Última Entrada de Texto -->
+                <div class="tutorial-step">
+                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-mouse-pointer mr-2 text-blue-400"></i> 2. Defina o Click ID com a Última Entrada de Texto</h3>
+                    <p class="text-gray-300 mb-4">O `click_id` é essencial para o rastreamento individual de cada venda. A primeira ação no seu fluxo, logo após o gatilho, deve ser a de capturar a "Última Entrada de Texto" do usuário e salvá-la em um campo personalizado chamado `click_id`. Siga a imagem abaixo:</p>
+                    <img src="https://i.postimg.cc/QN495ps5/Captura-de-Tela-2025-07-24-a-s-04-25-29.png" alt="" class="w-full h-auto rounded-md tutorial-image mb-4">
+                    <p class="text-xs text-gray-500 mb-2">Captura de Tela 2025-07-24 às 04:25:29.png</p>
+                    <ul class="list-disc list-inside text-gray-300 text-sm space-y-2 mb-4">
+                        <li>Adicione um bloco de "Action" (Ação) logo após o gatilho.</li>
+                        <li>Dentro da ação, clique em "Set Custom Field" (Definir Campo Personalizado).</li>
+                        <li>Selecione ou crie o campo personalizado: **`click_id`** (tipo Texto).</li>
+                        <li>Defina o valor como: **`{{last_text_input}}`** (Última Entrada de Texto).</li>
+                    </ul>
+                    <p class="text-gray-400 text-sm mt-3">Isso garante que cada interação do usuário seja rastreada com um identificador único.</p>
+                </div>
+
+                <!-- Passo 3: Importar o Fluxo Completo AZAG System no ManyChat -->
+                <div class="tutorial-step">
+                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-download mr-2 text-blue-400"></i> 3. Importe o Fluxo Completo AZAG System no ManyChat</h3>
+                    <p class="text-gray-300 mb-4">Para facilitar sua integração, criamos um fluxo único que contém todas as requisições e ações necessárias para o AZAG System. **Este fluxo é um exemplo de como as requisições e ações podem ser organizadas, e você pode adaptá-lo às suas necessidades após a importação.** Clique no botão abaixo para importar este fluxo diretamente para o seu ManyChat:</p>
                     
                     <a href="https://app.manychat.com/flowPlayerPage?share_hash=2960024_fd5120a02f06e5b0351c905be560a011d7caa6e6" target="_blank" class="btn-info w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-150 ease-in-out block text-center mb-3">
                         <i class="fas fa-copy mr-2"></i> Importar Fluxo Completo AZAG System
@@ -491,69 +522,13 @@
                     <div class="flex justify-center mb-4">
                         <iframe width="620" height="385" src="https://app.manychat.com/flowPlayerEmbed?share_hash=2960024_fd5120a02f06e5b0351c905be560a011d7caa6e6" allowFullScreen class="rounded-lg shadow-lg border border-gray-700"></iframe>
                     </div>
-                    <p class="text-gray-400 text-sm mb-1">Após clicar em "Importar Fluxo Completo AZAG System", o ManyChat será aberto com o fluxo carregado. Este fluxo já contém todas as requisições de API e ações que detalharemos nos próximos passos.</p>
+                    <p class="text-gray-400 text-sm mb-1">Após clicar em "Importar Fluxo Completo AZAG System", o ManyChat será aberto com o fluxo carregado. Este fluxo já contém blocos de "Requisição Externa" para: **Ajustar Valor PIX**, **Gerar Pagamento (PIX)** e **Confirmar Pagamento**.</p>
                     <p class="text-gray-400 text-sm mt-3">**Importante:** Após a importação, é fundamental clicar no botão <code class="bg-gray-700 p-1 rounded">Publish</code> (Publicar) no canto superior direito do ManyChat para salvar e ativar o fluxo.</p>
                 </div>
 
-                <!-- Passo 2: Detalhes das Requisições de API (parte do fluxo importado) -->
+                <!-- Passo 4: Verifique e Crie os Campos Personalizados (Se Necessário) -->
                 <div class="tutorial-step">
-                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-cogs mr-2 text-blue-400"></i> 2. Entendendo as Requisições de API no Fluxo (Já Importadas)</h3>
-                    <p class="text-gray-300 mb-4">O fluxo que você importou contém três requisições de API principais. Elas são blocos de "Requisição Externa" que se comunicam com o AZAG System. Não é necessário criá-las, apenas entender como funcionam:</p>
-                    
-                    <!-- Requisição: Ajustar Valor PIX -->
-                    <div class="bg-gray-800 p-4 rounded-md mb-6 border border-gray-700">
-                        <h4 class="text-lg font-semibold text-gray-100 mb-2">A) Ajustar Valor PIX</h4>
-                        <p class="text-gray-400 text-sm mb-3">Esta ação é usada para dividir o campo `valor venda` por 100 e armazenar o resultado em `valor em reais`. Isso é útil para converter valores de centavos para reais, por exemplo.</p>
-                        <p class="text-gray-400 text-sm mb-2">**Configuração da Ação "Definir campo do usuário" no ManyChat (dentro do fluxo importado):**</p>
-                        <img src="https://i.postimg.cc/289VkdRJ/Captura-de-Tela-2025-07-23-a-s-18-06-04.png" alt="" class="w-full h-auto rounded-md tutorial-image mb-2">
-                        <p class="text-xs text-gray-500 mb-2">Captura de Tela 2025-07-23 às 18.06.04.png</p>
-                        <p class="text-gray-400 text-sm mb-1">**Ação:** <code class="bg-gray-700 p-1 rounded text-yellow-100">Definir campo do usuário</code></p>
-                        <p class="text-gray-400 text-sm mb-1">**Campo:** <code class="bg-gray-700 p-1 rounded text-yellow-100">valor em reais</code></p>
-                        <p class="text-gray-400 text-sm mb-1">**Valor:** <code class="bg-gray-700 p-1 rounded text-yellow-100">{{valor venda}}/100</code></p>
-                    </div>
-
-                    <!-- Requisição: Gerar Pagamento -->
-                    <div class="bg-gray-800 p-4 rounded-md mb-6 border border-gray-700">
-                        <h4 class="text-lg font-semibold text-gray-100 mb-2">B) Gerar Pagamento (PIX)</h4>
-                        <p class="text-gray-400 text-sm mb-3">Este bloco de "Requisição Externa" é responsável por gerar um código PIX e notificar o AZAG System. Ele é geralmente usado antes de apresentar o PIX ao seu cliente no ManyChat.</p>
-                        <p class="text-gray-400 text-sm mb-2">**Configuração da Requisição Externa no ManyChat (dentro do fluxo importado):**</p>
-                        <img src="https://i.postimg.cc/7ZTYqpNG/Captura-de-Tela-2025-07-23-a-s-18-06-50.png" alt="" class="w-full h-auto rounded-md tutorial-image mb-2">
-                        <p class="text-xs text-gray-500 mb-2">Captura de Tela 2025-07-23 às 18.06.50.png</p>
-                        <p class="text-gray-400 text-sm mb-1">**URL:** <code class="bg-gray-700 p-1 rounded text-yellow-100">https://lead-tracker-api-production.up.railway.app/api/registerPix</code></p>
-                        <p class="text-gray-400 text-sm mb-1">**Tipo de Pedido:** <code class="bg-gray-700 p-1 rounded text-yellow-100">POST</code></p>
-                        <p class="text-gray-400 text-sm mb-1">**Corpo da Solicitação (JSON):**</p>
-                        <pre class="code-block mb-2"><code>{
-  "click_id": "{{click_id}}",
-  "pix_id": "{{$.id}}",
-  "pix_value": "{{valor em reais}}",
-  "secretKey": "12341"
-}</code></pre>
-                        <p class="text-sm text-gray-500">**Atenção ao `click_id`:** Este campo é crucial para o rastreamento. Ele já deve estar configurado no fluxo. Se você usa anúncios do Facebook, a variável `{{ad_id}}` é ideal. Caso contrário, `{{flow_json.click_id}}` funciona perfeitamente.</p>
-                        <p class="text-sm text-gray-500">Mapeie a resposta da API para os campos personalizados: `$.id` (para o ID do PIX) e `$.qr_code` (para o QR Code do PIX). Estes mapeamentos já vêm prontos no fluxo importado.</p>
-                    </div>
-
-                    <!-- Requisição: Confirmar Pagamento -->
-                    <div class="bg-gray-800 p-4 rounded-md mb-6 border border-gray-700">
-                        <h4 class="text-lg font-semibold text-gray-100 mb-2">C) Confirmar Pagamento</h4>
-                        <p class="text-gray-400 text-sm mb-3">Este bloco de "Requisição Externa" notifica o AZAG System de que um pagamento foi confirmado. Ele é ideal para ser usado após a identificação de um PIX pago (por exemplo, quando sua plataforma de pagamento envia um webhook).</p>
-                        <p class="text-gray-400 text-sm mb-2">**Configuração da Requisição Externa no ManyChat (dentro do fluxo importado):**</p>
-                        <img src="https://i.postimg.cc/vmsMbDBk/Captura-de-Tela-2025-07-23-a-s-18-07-43.png" alt="" class="w-full h-auto rounded-md tutorial-image mb-2">
-                        <p class="text-xs text-gray-500 mb-2">Captura de Tela 2025-07-23 às 18.07.43.png</p>
-                        <p class="text-gray-400 text-sm mb-1">**URL:** <code class="bg-gray-700 p-1 rounded text-yellow-100">https://lead-tracker-api-production.up.railway.app/api/confirmPayment</code></p>
-                        <p class="text-400 text-sm mb-1">**Tipo de Pedido:** <code class="bg-gray-700 p-1 rounded text-yellow-100">POST</code></p>
-                        <p class="text-400 text-sm mb-1">**Corpo da Solicitação (JSON):**</p>
-                        <pre class="code-block mb-2"><code>{
-  "click_id": "{{click_id}}",
-  "conversion_value": "{{valor em reais}}",
-  "secretKey": "12341"
-}</code></pre>
-                        <p class="text-sm text-gray-500">Certifique-se de que <code class="bg-gray-700 p-1 rounded">click_id</code> e <code class="bg-gray-700 p-1 rounded">valor em reais</code> são os campos personalizados do ManyChat. Eles já devem estar configurados corretamente no fluxo importado.</p>
-                    </div>
-                </div>
-
-                <!-- Campos Personalizados do Usuário (Verificação) -->
-                <div class="tutorial-step">
-                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-user-tag mr-2 text-blue-400"></i> 3. Verifique e Crie os Campos Personalizados (Se Necessário)</h3>
+                    <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-user-tag mr-2 text-blue-400"></i> 4. Verifique e Crie os Campos Personalizados (Se Necessário)</h3>
                     <p class="text-gray-300 mb-4">Campos Personalizados são como "gavetas" no ManyChat onde guardamos informações importantes sobre seus clientes (como o valor do PIX, o status do pagamento, etc.). **Quando você importa o fluxo completo, o ManyChat geralmente cria essas "gavetas" automaticamente para você.** Mas é sempre bom dar uma olhada para ter certeza de que está tudo certo!</p>
                     <p class="text-gray-300 mb-4">Para verificar, siga estes passos simples no seu ManyChat:</p>
                     <ol class="list-decimal list-inside text-gray-300 text-sm space-y-2 mb-4">
@@ -564,6 +539,7 @@
                     <ul class="list-disc list-inside text-gray-300 text-sm space-y-2 mb-4 ml-4">
                         <li>**valor em reais**: Tipo **Number**</li>
                         <li>**valor da venda**: Tipo **Number**</li>
+                        <li>**click_id**: Tipo **Text** (Este é o campo que você definiu no Passo 2)</li>
                         <li>**$.id**: Tipo **Text**</li>
                         <li>**$.qr_code**: Tipo **Text**</li>
                         <li>**$.status**: Tipo **Text**</li>
