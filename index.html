@@ -374,6 +374,63 @@
                 padding: 0.8rem 2rem;
             }
         }
+
+        /* Estilos para o Modal de Mensagem */
+        .message-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .message-modal-content {
+            background-color: #1a202c;
+            border: 1px solid #00e6e6;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            color: #e0f2f7;
+            position: relative;
+        }
+
+        .message-modal-content h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00e6e6;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .message-modal-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .message-modal-content button {
+            background-image: linear-gradient(to right, #00e6e6, #8a2be2);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 255, 255, 0.3);
+        }
+
+        .message-modal-content button:hover {
+            background-image: linear-gradient(to right, #00cccc, #7a1ad5);
+            box-shadow: 0 6px 15px rgba(0, 255, 255, 0.5);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
@@ -420,24 +477,31 @@
                 </div>
                 <p class="mt-1 text-xs text-gray-400">. Ele será usado futuramente.</p>
             </div>
+
+            <!-- NOVO CAMPO: Domínios da Pressel -->
             <div class="relative">
-                <label for="meta_pixel_id" class="block text-sm font-medium text-gray-300 mb-1">ID do Pixel da Meta (Facebook Pixel ID):</label>
+                <label for="client_domains" class="block text-sm font-medium text-gray-300 mb-1">Domínios da Pressel (separe por vírgulas, ex: https://meusite.com,https://outrosite.net):</label>
                 <div class="flex items-center">
-                    <input type="text" id="meta_pixel_id" name="meta_pixel_id" required
+                    <input type="text" id="client_domains" name="client_domains" required
+                           placeholder="https://sua-pressel.com,https://outra-pressel.net"
                            class="input-field mt-1 block w-full px-4 py-2 rounded-md shadow-sm focus:ring sm:text-sm">
                 </div>
-                <p class="mt-1 text-xs text-gray-400">Este campo é obrigatório.</p>
-            </div>
-            <div class="relative">
-                <label for="meta_conversion_api_token" class="block text-sm font-medium text-gray-300 mb-1">Token da API de Conversões da Meta:</label>
-                <div class="flex items-center">
-                    <input type="text" id="meta_conversion_api_token" name="meta_conversion_api_token" required
-                           class="input-field mt-1 block w-full px-4 py-2 rounded-md shadow-sm focus:ring sm:text-sm">
-                </div>
-                <p class="mt-1 text-xs text-gray-400">Este campo é obrigatório.</p>
+                <p class="mt-1 text-xs text-gray-400">Inclua o protocolo (http:// ou https://).</p>
             </div>
 
-            <button type="submit"
+            <!-- NOVA SEÇÃO: Múltiplos Pixels da Meta -->
+            <div class="relative border border-gray-700 p-4 rounded-md">
+                <h3 class="text-base font-medium text-gray-300 mb-3">Pixels da Meta (Opcional, adicione quantos precisar):</h3>
+                <div id="metaPixelsContainer" class="space-y-4">
+                    <!-- Pixels serão adicionados aqui dinamicamente -->
+                </div>
+                <button type="button" id="addPixelBtn"
+                        class="btn-secondary mt-4 w-full py-2 px-4 rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 transition duration-150 ease-in-out">
+                    <i class="fas fa-plus-circle mr-2"></i> Adicionar Pixel
+                </button>
+            </div>
+
+            <button type="submit" id="submitOnboardFormBtn"
                     class="btn-primary w-full flex justify-center py-3 px-4 rounded-md shadow-lg text-lg font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
                 <i class="fas fa-rocket mr-2"></i> Onboardar Cliente
             </button>
@@ -482,7 +546,7 @@
                 <div class="tutorial-step">
                     <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-play-circle mr-2 text-blue-400"></i> 1. Configure o Gatilho (Trigger) do seu Fluxo</h3>
                     <p class="text-gray-300 mb-4">O gatilho é o que "inicia" seu fluxo no ManyChat. Para que o AZAG System funcione corretamente com o Telegram, o gatilho deve ser configurado para quando o usuário optar pelo Telegram. Siga a imagem abaixo para configurar exatamente:</p>
-                    <img src="https://i.postimg.cc/Wb890Yz8/Captura-de-Tela-2025-07-24-a-s-04-21-58.png" alt="" class="w-full h-auto rounded-md tutorial-image mb-4">
+                    <img src="https://i.postimg.cc/Wb890Yz8/Captura-de-Tela-2025-07-24-a-s-04-21-58.png" alt="Configuração do gatilho do ManyChat para Telegram Opt-in" class="w-full h-auto rounded-md tutorial-image mb-4">
                     <p class="text-xs text-gray-500 mb-2">Captura de Tela 2025-07-24 às 04:21:58.png</p>
                     <ul class="list-disc list-inside text-gray-300 text-sm space-y-2 mb-4">
                         <li>No ManyChat, crie um novo fluxo ou edite um existente.</li>
@@ -498,7 +562,7 @@
                 <div class="tutorial-step">
                     <h3 class="text-xl font-semibold text-gray-100 mb-2"><i class="fas fa-mouse-pointer mr-2 text-blue-400"></i> 2. Defina o Click ID com a Última Entrada de Texto</h3>
                     <p class="text-gray-300 mb-4">O `click_id` é essencial para o rastreamento individual de cada venda. A primeira ação no seu fluxo, logo após o gatilho, deve ser a de capturar a "Última Entrada de Texto" do usuário e salvá-la em um campo personalizado chamado `click_id`. Siga a imagem abaixo:</p>
-                    <img src="https://i.postimg.cc/QN495ps5/Captura-de-Tela-2025-07-24-a-s-04-25-29.png" alt="" class="w-full h-auto rounded-md tutorial-image mb-4">
+                    <img src="https://i.postimg.cc/QN495ps5/Captura-de-Tela-2025-07-24-a-s-04-25-29.png" alt="Configuração do ManyChat para definir click_id" class="w-full h-auto rounded-md tutorial-image mb-4">
                     <p class="text-xs text-gray-500 mb-2">Captura de Tela 2025-07-24 às 04:25:29.png</p>
                     <ul class="list-disc list-inside text-gray-300 text-sm space-y-2 mb-4">
                         <li>Adicione um bloco de "Action" (Ação) logo após o gatilho.</li>
@@ -544,11 +608,11 @@
                         <li>**$.qr_code**: Tipo **Text**</li>
                         <li>**$.status**: Tipo **Text**</li>
                     </ul>
-                    <img src="https://i.postimg.cc/1zZzzsMn/Captura-de-Tela-2025-07-23-a-s-19-03-53.png" alt="" class="w-full h-auto rounded-md tutorial-image mb-4">
-                    <p class="text-xs text-gray-500 mb-2">Captura de Tela 2025-07-23 às 19.03.53.png</p>
+                    <img src="https://i.postimg.cc/1zZzzsMn/Captura-de-Tela-2025-07-23-a-s-19-03-53.png" alt="ManyChat Custom Fields" class="w-full h-auto rounded-md tutorial-image mb-4">
+                    <p class="text-xs text-gray-500 mb-2">Captura de Tela 2025-07-23 às 19.03:53.png</p>
                     <p class="text-sm text-gray-400">**Se algum campo estiver faltando, você pode criá-lo manualmente:**</p>
                     <ol class="list-decimal list-inside text-gray-300 text-sm space-y-2 mb-4">
-                        <li>Na mesma tela de <code class="bg-gray-700 p-1 rounded">Custom Fields</code>, clique no botão azul <code class="bg-gray-700 p-1 rounded">+ New User Field</code>.</li>
+                        <li>Na mesma tela de <code class="bg-gray-700 p-1 rounded">+ New User Field</code>, clique no botão azul <code class="bg-gray-700 p-1 rounded">+ New User Field</code>.</li>
                         <li>No campo 'Field Name' (Nome do Campo), digite o nome exato do campo que está faltando (ex: `valor em reais` ou `$.id`).</li>
                         <li>Em 'Field Type' (Tipo do Campo), escolha o tipo correto (use **Number** para valores numéricos e **Text** para IDs e QR Codes).</li>
                         <li>Clique em 'Create' (Criar).</li>
@@ -581,6 +645,15 @@
         </button>
     </div>
 
+    <!-- Modal de Mensagem -->
+    <div id="messageModal" class="message-modal-overlay hidden">
+        <div class="message-modal-content">
+            <h3 id="modalTitle"></h3>
+            <p id="modalMessage"></p>
+            <button id="modalCloseBtn">OK</button>
+        </div>
+    </div>
+
 
     <script>
         const API_BASE_URL = 'https://lead-tracker-api-production.up.railway.app'; // Sua URL base da API Node.js
@@ -598,7 +671,11 @@
         const getPresselHtmlBtn = document.getElementById('getPresselHtmlBtn');
         const presselHtmlCode = document.getElementById('presselHtmlCode');
         const copyPresselHtmlBtn = document.getElementById('copyPresselHtmlBtn');
-        // const contractProBtn = document.getElementById('contractProBtn'); // Removido, pois a seção PRO foi movida
+        const submitOnboardFormBtn = document.getElementById('submitOnboardFormBtn'); // Botão de submissão
+
+        // Elementos para Múltiplos Pixels
+        const metaPixelsContainer = document.getElementById('metaPixelsContainer');
+        const addPixelBtn = document.getElementById('addPixelBtn');
 
         // Elementos da Seção de Tutorial ManyChat
         const tutorialSection = document.getElementById('tutorialSection'); 
@@ -608,6 +685,25 @@
         // Elementos da Página PRO Indisponível
         const proUnavailablePage = document.getElementById('proUnavailablePage');
         const btnRegisterFreeFromPro = document.getElementById('btnRegisterFreeFromPro');
+
+        // Elementos do Modal de Mensagem
+        const messageModal = document.getElementById('messageModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        // Função para exibir o modal de mensagem
+        function showMessageModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            messageModal.classList.remove('hidden');
+        }
+
+        // Event Listener para fechar o modal
+        modalCloseBtn.addEventListener('click', () => {
+            messageModal.classList.add('hidden');
+        });
+
 
         // Funções para controlar a visibilidade das seções
         function showSection(sectionToShow) {
@@ -623,6 +719,8 @@
         // Event Listeners da Landing Page
         btnFree.addEventListener('click', () => {
             showSection(freeOnboardingSection);
+            // Adiciona um par de campos de pixel por padrão ao entrar na seção de onboarding
+            addPixelInputPair(); 
         });
 
         btnProUnavailable.addEventListener('click', () => {
@@ -632,6 +730,8 @@
         // Event Listener do botão "Cadastrar Cliente FREE" na página PRO Indisponível
         btnRegisterFreeFromPro.addEventListener('click', () => {
             showSection(freeOnboardingSection);
+            // Adiciona um par de campos de pixel por padrão ao entrar na seção de onboarding
+            addPixelInputPair();
         });
 
         // Lógica para expandir/contrair a seção de tutorial visual
@@ -645,15 +745,71 @@
             }
         });
 
+        // Função para adicionar um novo par de campos de Pixel ID e Access Token
+        function addPixelInputPair() {
+            const pixelPairDiv = document.createElement('div');
+            pixelPairDiv.classList.add('flex', 'flex-col', 'space-y-2', 'border', 'border-gray-800', 'p-3', 'rounded-md', 'bg-gray-900');
+
+            pixelPairDiv.innerHTML = `
+                <label class="block text-sm font-medium text-gray-400">Pixel ID:</label>
+                <input type="text" class="input-field pixel-id-input w-full" placeholder="Ex: 123456789012345">
+                <label class="block text-sm font-medium text-gray-400">Access Token:</label>
+                <input type="text" class="input-field access-token-input w-full" placeholder="Ex: EAA... (API de Conversões)">
+                <button type="button" class="remove-pixel-btn text-red-400 text-sm self-end hover:text-red-600 transition-colors">
+                    <i class="fas fa-times-circle mr-1"></i> Remover Pixel
+                </button>
+            `;
+            metaPixelsContainer.appendChild(pixelPairDiv);
+
+            // Adiciona event listener para o botão de remover
+            pixelPairDiv.querySelector('.remove-pixel-btn').addEventListener('click', () => {
+                pixelPairDiv.remove();
+            });
+        }
+
+        // Adiciona event listener para o botão "Adicionar Pixel"
+        addPixelBtn.addEventListener('click', addPixelInputPair);
+
         // Lógica de submissão do formulário de onboarding
         onboardingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            // Desabilita o botão e mostra estado de carregamento
+            submitOnboardFormBtn.disabled = true;
+            submitOnboardFormBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Onboardando...';
+
             const formData = new FormData(onboardingForm);
             const data = Object.fromEntries(formData.entries());
 
+            // Coleta os domínios da pressel
+            data.client_domains = document.getElementById('client_domains').value.trim();
+
+            // Coleta os múltiplos pixels da Meta
+            const metaPixels = [];
+            const pixelPairs = metaPixelsContainer.querySelectorAll('.flex.flex-col.space-y-2'); // Seleciona cada par de pixel
+            pixelPairs.forEach(pairDiv => {
+                const pixelIdInput = pairDiv.querySelector('.pixel-id-input');
+                const accessTokenInput = pairDiv.querySelector('.access-token-input');
+                
+                if (pixelIdInput && accessTokenInput && pixelIdInput.value.trim() && accessTokenInput.value.trim()) {
+                    metaPixels.push({
+                        pixel_id: pixelIdInput.value.trim(),
+                        access_token: accessTokenInput.value.trim()
+                    });
+                }
+            });
+            data.meta_pixels = metaPixels;
+
+            // Remove campos que não são mais necessários ou que são tratados de forma diferente
+            delete data.meta_pixel_id;
+            delete data.meta_conversion_api_token;
+
+            console.log('Enviando dados para a API:', JSON.stringify(data, null, 2));
+            const onboardUrl = `${API_BASE_URL}/api/onboardClient`;
+            console.log('URL da API para onboardClient:', onboardUrl);
+
             try {
-                const response = await fetch(`${API_BASE_URL}/api/onboardClient`, {
+                const response = await fetch(onboardUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -674,12 +830,19 @@
                     tutorialSection.classList.remove('hidden'); 
                     tutorialContentDiv.classList.remove('hidden'); // Garante que o conteúdo do tutorial esteja expandido
                     toggleTutorialButton.innerHTML = '<i class="fas fa-chevron-up mr-2"></i> Contrair Guia de Configuração';
+                    showMessageModal('Sucesso!', 'Cliente onboardado com sucesso!');
 
                 } else {
-                    console.error(`Erro ao onboardar cliente: ${result.message || 'Erro desconhecido'}`);
+                    console.error(`Erro ao onboardar cliente (API response): ${result.message || 'Erro desconhecido'}`);
+                    showMessageModal('Erro!', `Erro ao onboardar cliente: ${result.message || 'Erro desconhecido'}`);
                 }
             } catch (error) {
-                console.error(`Erro de rede: ${error.message}`);
+                console.error(`Erro de rede na requisição de onboardClient: ${error.message}`, error); // Log mais detalhado
+                showMessageModal('Erro de Rede!', `Erro de rede: ${error.message}. Verifique sua conexão ou a URL da API.`);
+            } finally {
+                // Habilita o botão e restaura o texto
+                submitOnboardFormBtn.disabled = false;
+                submitOnboardFormBtn.innerHTML = '<i class="fas fa-rocket mr-2"></i> Onboardar Cliente';
             }
         });
 
@@ -688,11 +851,14 @@
             const clientId = clientIdDisplay.textContent;
             if (!clientId) {
                 console.error('Client ID não encontrado. Por favor, onboarde um cliente primeiro.');
+                showMessageModal('Atenção!', 'Client ID não encontrado. Por favor, onboarde um cliente primeiro.');
                 return;
             }
+            const presselUrl = `${API_BASE_URL}/api/getClientPresselHtml?client_id=${clientId}`;
+            console.log('URL da API para getClientPresselHtml:', presselUrl);
 
             try {
-                const response = await fetch(`${API_BASE_URL}/api/getClientPresselHtml?client_id=${clientId}`);
+                const response = await fetch(presselUrl);
                 const htmlContent = await response.text(); // Recebe como texto/html
 
                 if (response.ok) {
@@ -700,10 +866,12 @@
                     presselHtmlCode.classList.remove('hidden');
                     copyPresselHtmlBtn.classList.remove('hidden');
                 } else {
-                    console.error(`Erro ao obter pressel HTML: ${htmlContent || 'Erro desconhecido'}`);
+                    console.error(`Erro ao obter pressel HTML (API response): ${htmlContent || 'Erro desconhecido'}`);
+                    showMessageModal('Erro!', `Erro ao obter pressel HTML: ${htmlContent || 'Erro desconhecido'}`);
                 }
             } catch (error) {
-                console.error(`Erro de rede: ${error.message}`);
+                console.error(`Erro de rede na requisição de getClientPresselHtml: ${error.message}`, error); // Log mais detalhado
+                showMessageModal('Erro de Rede!', `Erro de rede: ${error.message}. Verifique sua conexão ou a URL da API.`);
             }
         });
 
@@ -716,8 +884,10 @@
             textarea.select();
             try {
                 document.execCommand('copy');
+                showMessageModal('Copiado!', 'Código da Pressel copiado para a área de transferência!');
             } catch (err) {
                 console.error('Erro ao copiar texto:', err);
+                showMessageModal('Erro!', 'Erro ao copiar texto. Por favor, copie manualmente.');
             }
             document.body.removeChild(textarea);
         });
