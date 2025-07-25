@@ -529,6 +529,30 @@
                     <h3 class="font-semibold text-gray-100">2. Configurações do ManyChat (Fluxos):</h3>
                     <p class="text-sm text-gray-400 mb-2">Siga as instruções abaixo para configurar os blocos de requisição externa no seu ManyChat. Elas já estão personalizadas para você.</p>
                 </div>
+
+                <!-- NOVA SEÇÃO: URLs da API para Rastreamento e Dashboard -->
+                <div class="mt-8">
+                    <h3 class="font-semibold text-gray-100">3. URLs da API para Rastreamento e Dashboard:</h3>
+                    <p class="text-sm text-gray-400 mb-2">Use estas URLs para integrar com seus sistemas ou para acessar dados diretamente.</p>
+                    <div class="code-block text-xs">
+                        <p><strong>API Base:</strong> <code id="apiBaseUrlDisplay"></code></p>
+                        <p><strong>Para Onboardar Clientes:</strong> <code id="onboardClientUrlDisplay"></code></p>
+                        <p><strong>Para Obter Pressel HTML Personalizada:</strong> <code id="getPresselHtmlUrlDisplay"></code></p>
+                        <p><strong>Para Obter Configurações do ManyChat:</strong> <code id="getManyChatConfigUrlDisplay"></code></p>
+                        <p><strong>Para Registrar Cliques:</strong> <code id="registerClickUrlDisplay"></code></p>
+                        <p><strong>Para Registrar Informações do PIX:</strong> <code id="registerPixUrlDisplay"></code></p>
+                        <p><strong>Para Confirmar Pagamento:</strong> <code id="confirmPaymentUrlDisplay"></code></p>
+                        <p><strong>Para Consultar Cidade por Click ID:</strong> <code id="getCityUrlDisplay"></code></p>
+                        <p class="mt-4"><strong>URLs do Dashboard (Substitua `{client_id}` pelo Client ID gerado):</strong></p>
+                        <p><strong>Cidades Únicas:</strong> <code id="dashboardCitiesUrlDisplay"></code></p>
+                        <p><strong>Total de PIX Gerados:</strong> <code id="dashboardTotalPixGeneratedUrlDisplay"></code></p>
+                        <p><strong>Valor Total Faturado:</strong> <code id="dashboardTotalInvoicedAmountUrlDisplay"></code></p>
+                        <p><strong>Faturamento Total (PIX Pagos):</strong> <code id="dashboardTotalRevenueUrlDisplay"></code></p>
+                        <p><strong>Total de Vendas (Conversões):</strong> <code id="dashboardTotalConversionsUrlDisplay"></code></p>
+                        <p><strong>Faturamento por Período:</strong> <code id="dashboardRevenueByPeriodUrlDisplay"></code></p>
+                        <p><strong>Vendas Recentes:</strong> <code id="dashboardRecentSalesUrlDisplay"></code></p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -656,7 +680,8 @@
 
 
     <script>
-        const API_BASE_URL = 'https://lead-tracker-api-production.up.railway.app'; // Sua URL base da API Node.js
+        // Define a URL base da sua API no Railway.app
+        const API_BASE_URL = 'https://lead-tracker-api-railway-production.up.railway.app'; 
 
         // Elementos da Landing Page
         const landingPage = document.getElementById('landingPage');
@@ -691,6 +716,24 @@
         const modalTitle = document.getElementById('modalTitle');
         const modalMessage = document.getElementById('modalMessage');
         const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        // Elementos para exibir as URLs da API
+        const apiBaseUrlDisplay = document.getElementById('apiBaseUrlDisplay');
+        const onboardClientUrlDisplay = document.getElementById('onboardClientUrlDisplay');
+        const getPresselHtmlUrlDisplay = document.getElementById('getPresselHtmlUrlDisplay');
+        const getManyChatConfigUrlDisplay = document.getElementById('getManyChatConfigUrlDisplay');
+        const registerClickUrlDisplay = document.getElementById('registerClickUrlDisplay');
+        const registerPixUrlDisplay = document.getElementById('registerPixUrlDisplay');
+        const confirmPaymentUrlDisplay = document.getElementById('confirmPaymentUrlDisplay');
+        const getCityUrlDisplay = document.getElementById('getCityUrlDisplay');
+        const dashboardCitiesUrlDisplay = document.getElementById('dashboardCitiesUrlDisplay');
+        const dashboardTotalPixGeneratedUrlDisplay = document.getElementById('dashboardTotalPixGeneratedUrlDisplay');
+        const dashboardTotalInvoicedAmountUrlDisplay = document.getElementById('dashboardTotalInvoicedAmountUrlDisplay');
+        const dashboardTotalRevenueUrlDisplay = document.getElementById('dashboardTotalRevenueUrlDisplay');
+        const dashboardTotalConversionsUrlDisplay = document.getElementById('dashboardTotalConversionsUrlDisplay');
+        const dashboardRevenueByPeriodUrlDisplay = document.getElementById('dashboardRevenueByPeriodUrlDisplay');
+        const dashboardRecentSalesUrlDisplay = document.getElementById('dashboardRecentSalesUrlDisplay');
+
 
         // Função para exibir o modal de mensagem
         function showMessageModal(title, message) {
@@ -770,6 +813,25 @@
         // Adiciona event listener para o botão "Adicionar Pixel"
         addPixelBtn.addEventListener('click', addPixelInputPair);
 
+        // Função para exibir as URLs da API na seção de resultados
+        function displayApiUrls(clientId) {
+            apiBaseUrlDisplay.textContent = API_BASE_URL;
+            onboardClientUrlDisplay.textContent = `${API_BASE_URL}/api/onboardClient`;
+            getPresselHtmlUrlDisplay.textContent = `${API_BASE_URL}/api/getClientPresselHtml?client_id=${clientId}`;
+            getManyChatConfigUrlDisplay.textContent = `${API_BASE_URL}/api/getClientManyChatConfig?client_id=${clientId}`;
+            registerClickUrlDisplay.textContent = `${API_BASE_URL}/api/registerClick`;
+            registerPixUrlDisplay.textContent = `${API_BASE_URL}/api/registerPix`;
+            confirmPaymentUrlDisplay.textContent = `${API_BASE_URL}/api/confirmPayment`;
+            getCityUrlDisplay.textContent = `${API_BASE_URL}/api/getCity?click_id=SEU_CLICK_ID`;
+            dashboardCitiesUrlDisplay.textContent = `${API_BASE_URL}/api/dashboard/cities?client_id=${clientId}`;
+            dashboardTotalPixGeneratedUrlDisplay.textContent = `${API_BASE_URL}/api/dashboard/totalPixGenerated?client_id=${clientId}`;
+            dashboardTotalInvoicedAmountUrlDisplay.textContent = `${API_BASE_URL}/api/dashboard/totalInvoicedAmount?client_id=${clientId}`;
+            dashboardTotalRevenueUrlDisplay.textContent = `${API_BASE_URL}/api/dashboard/totalRevenue?client_id=${clientId}`;
+            dashboardTotalConversionsUrlDisplay.textContent = `${API_BASE_URL}/api/dashboard/totalConversions?client_id=${clientId}`;
+            dashboardRevenueByPeriodUrlDisplay.textContent = `${API_BASE_URL}/api/dashboard/revenueByPeriod?client_id=${clientId}&start_date={YYYY-MM-DD}&end_date={YYYY-MM-DD}`;
+            dashboardRecentSalesUrlDisplay.textContent = `${API_BASE_URL}/api/dashboard/recentSales?client_id=${clientId}&limit={number}&offset={number}`;
+        }
+
         // Lógica de submissão do formulário de onboarding
         onboardingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -820,7 +882,8 @@
                 const result = await response.json();
 
                 if (response.ok && result.status === 'success') {
-                    clientIdDisplay.textContent = result.client_id;
+                    const newClientId = result.client_id;
+                    clientIdDisplay.textContent = newClientId;
                     
                     // Oculta o formulário de onboarding
                     onboardingForm.classList.add('hidden'); 
@@ -831,6 +894,9 @@
                     tutorialContentDiv.classList.remove('hidden'); // Garante que o conteúdo do tutorial esteja expandido
                     toggleTutorialButton.innerHTML = '<i class="fas fa-chevron-up mr-2"></i> Contrair Guia de Configuração';
                     showMessageModal('Sucesso!', 'Cliente onboardado com sucesso!');
+
+                    // CHAMA A FUNÇÃO PARA EXIBIR AS NOVAS URLs DA API
+                    displayApiUrls(newClientId);
 
                 } else {
                     console.error(`Erro ao onboardar cliente (API response): ${result.message || 'Erro desconhecido'}`);
