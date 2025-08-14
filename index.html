@@ -43,9 +43,7 @@
         #auth-container.active, #dashboard-container.active { display: block; animation: fadeIn 0.5s ease-in-out; }
         [data-page] { display: none; }
         [data-page].active { display: flex; }
-        [data-page-content] { display: none; }
-        [data-page-content].active { display: block; animation: fadeIn 0.3s ease-in-out; }
-
+        
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .modal { display: none; }
         .modal.active { display: flex; }
@@ -153,7 +151,9 @@
     "click_id": "lead123456",
     "value_cents": 1000
 }</pre></div>
-                <div class="glass-card p-4 rounded-lg"><h3 class="font-semibold text-sky-400">2. Consultar PIX</h3><p class="text-sm text-gray-400 mb-2">Envie uma requisição GET para <code class="bg-gray-900 p-1 rounded">/api/manychat/check-pix/{pix_id}</code>. Substitua `{pix_id}` pelo ID retornado no passo anterior.</p></div>
+                <div class="glass-card p-4 rounded-lg"><h3 class="font-semibold text-sky-400">2. Consultar PIX</h3><p class="text-sm text-gray-400 mb-2">Envie uma requisição POST para <code class="bg-gray-900 p-1 rounded">/api/manychat/check-status-by-clickid</code>. A API verificará todos os PIX gerados para o lead.</p><pre class="bg-gray-900 rounded p-2 text-sm font-mono">{
+    "click_id": "lead123456"
+}</pre></div>
                 <div class="glass-card p-4 rounded-lg"><h3 class="font-semibold text-sky-400">3. Consultar Cidade</h3><p class="text-sm text-gray-400 mb-2">Envie uma requisição POST para <code class="bg-gray-900 p-1 rounded">/api/manychat/get-city</code> com o seguinte corpo:</p><pre class="bg-gray-900 rounded p-2 text-sm font-mono">{
     "click_id": "lead123456"
 }</pre></div>
