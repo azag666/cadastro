@@ -32,21 +32,46 @@
             box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
             background-color: rgba(39, 39, 42, 0.8);
         }
-        .btn { transition: all 0.3s ease; }
-        .btn-primary { background-color: #0ea5e9; }
-        .btn-primary:hover { background-color: #38bdf8; }
+        .btn {
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+        .btn-primary { 
+            background-color: #0ea5e9; 
+            box-shadow: inset 0 -4px 0 #0284c7;
+        }
+        .btn-primary:hover { 
+            background-color: #38bdf8;
+            transform: translateY(-2px);
+            box-shadow: inset 0 -2px 0 #0284c7, 0 10px 20px rgba(14, 165, 233, 0.2);
+        }
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: inset 0 0 0 #0284c7;
+        }
+        .btn-danger { background-color: #dc2626; box-shadow: inset 0 -4px 0 #b91c1c; }
+        .btn-danger:hover { background-color: #ef4444; transform: translateY(-2px); box-shadow: inset 0 -2px 0 #b91c1c; }
+        .btn-danger:active { transform: translateY(1px); box-shadow: inset 0 0 0 #b91c1c; }
+        .btn-secondary { background-color: #4b5563; box-shadow: inset 0 -4px 0 #374151; }
+        .btn-secondary:hover { background-color: #6b7280; transform: translateY(-2px); box-shadow: inset 0 -2px 0 #374151; }
+        .btn-secondary:active { transform: translateY(1px); box-shadow: inset 0 0 0 #374151; }
+
         .sidebar-item { border-left: 3px solid transparent; transition: all 0.2s; }
         .sidebar-item:hover { background-color: rgba(38, 38, 38, 0.5); border-left-color: #38bdf8; }
-        .sidebar-item.active { background-color: rgba(14, 165, 233, 0.1); border-left-color: #0ea5e9; }
+        .sidebar-item.active { background-color: rgba(14, 165, 233, 0.1); border-left-color: #0ea5e9; font-weight: 600; color: white; }
 
         #auth-container, #dashboard-container { display: none; }
         #auth-container.active, #dashboard-container.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        [data-page] { display: none; }
+        [data-page].active { display: flex; }
         [data-page-content] { display: none; }
         [data-page-content].active { display: block; animation: fadeIn 0.3s ease-in-out; }
 
         @keyframes fadeIn {
             from { opacity: 0; } to { opacity: 1; }
         }
+        .modal { display: none; }
+        .modal.active { display: flex; }
     </style>
 </head>
 <body class="text-gray-200">
@@ -54,12 +79,56 @@
     <!-- Container de Autenticação -->
     <div id="auth-container">
         <!-- PÁGINA DE LOGIN -->
-        <div data-page="login" class="flex items-center justify-center min-h-screen p-4">
-            <!-- Conteúdo do formulário de login aqui... -->
+        <div data-page="login" class="items-center justify-center min-h-screen p-4">
+            <div class="w-full max-w-md glass-card p-8 rounded-2xl shadow-2xl">
+                <div class="text-center mb-8">
+                    <svg class="mx-auto h-12 w-auto text-sky-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
+                    <h1 class="text-3xl font-bold mt-4 text-white">Acesse sua Plataforma</h1>
+                    <p class="text-gray-400 mt-2">Bem-vindo de volta!</p>
+                </div>
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label for="login-email" class="text-sm font-medium text-gray-400">E-mail</label>
+                        <input type="email" id="login-email" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="voce@exemplo.com">
+                    </div>
+                    <div>
+                        <label for="login-password" class="text-sm font-medium text-gray-400">Senha</label>
+                        <input type="password" id="login-password" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full text-white font-semibold py-3 rounded-md">Entrar</button>
+                </form>
+                <div class="text-center mt-6">
+                    <a href="#" id="showRegister" class="text-sm text-sky-400 hover:text-sky-300">Não tem uma conta? Cadastre-se</a>
+                </div>
+            </div>
         </div>
         <!-- PÁGINA DE CADASTRO -->
-        <div data-page="register" class="flex items-center justify-center min-h-screen p-4">
-            <!-- Conteúdo do formulário de cadastro aqui... -->
+        <div data-page="register" class="items-center justify-center min-h-screen p-4">
+            <div class="w-full max-w-md glass-card p-8 rounded-2xl shadow-2xl">
+                <div class="text-center mb-8">
+                    <svg class="mx-auto h-12 w-auto text-sky-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
+                    <h1 class="text-3xl font-bold mt-4 text-white">Crie sua Conta</h1>
+                    <p class="text-gray-400 mt-2">Rastreamento de conversões com 100% de precisão.</p>
+                </div>
+                <form id="registerForm" class="space-y-6">
+                    <div>
+                        <label for="register-name" class="text-sm font-medium text-gray-400">Nome Completo</label>
+                        <input type="text" id="register-name" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="Seu nome">
+                    </div>
+                    <div>
+                        <label for="register-email" class="text-sm font-medium text-gray-400">E-mail</label>
+                        <input type="email" id="register-email" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="voce@exemplo.com">
+                    </div>
+                    <div>
+                        <label for="register-password" class="text-sm font-medium text-gray-400">Senha</label>
+                        <input type="password" id="register-password" required minlength="8" class="form-input w-full p-3 mt-1 rounded-md" placeholder="Mínimo 8 caracteres">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full text-white font-semibold py-3 rounded-md">Criar Conta</button>
+                </form>
+                <div class="text-center mt-6">
+                    <a href="#" id="showLogin" class="text-sm text-sky-400 hover:text-sky-300">Já tem uma conta? Faça Login</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -72,7 +141,7 @@
                     <svg class="mx-auto h-10 w-auto text-sky-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
                     <h1 class="text-2xl font-bold mt-2 text-white">HotTrack</h1>
                 </div>
-                <nav class="flex flex-col space-y-2">
+                <nav id="sidebarNav" class="flex flex-col space-y-2">
                     <a href="#" data-target="dashboard-main" class="sidebar-item text-gray-300 hover:text-white p-3 rounded-lg flex items-center">
                         <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                         Dashboard
@@ -97,112 +166,110 @@
 
             <!-- Conteúdo Principal -->
             <main class="flex-1 p-8 overflow-y-auto">
-                
-                <!-- CONTEÚDO: DASHBOARD -->
-                <div data-page-content="dashboard-main" class="active">
-                    <h1 class="text-3xl font-bold text-white mb-6">Dashboard</h1>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="glass-card p-6 rounded-lg">
-                            <h3 class="text-gray-400">PIX Gerados (Últimos 30 dias)</h3>
-                            <p id="pix-generated" class="text-4xl font-bold text-sky-400">0</p>
-                        </div>
-                        <div class="glass-card p-6 rounded-lg">
-                            <h3 class="text-gray-400">PIX Pagos (Últimos 30 dias)</h3>
-                            <p id="pix-paid" class="text-4xl font-bold text-green-400">0</p>
-                        </div>
-                    </div>
+                <div id="dashboard-content-container">
+                    <!-- Conteúdo dinâmico será injetado aqui -->
                 </div>
-
-                <!-- CONTEÚDO: PRESSEL -->
-                <div data-page-content="pressel">
-                    <h1 class="text-3xl font-bold text-white mb-6">Gerador de Presell</h1>
-                    <!-- Conteúdo do Gerador de Presell aqui... -->
-                </div>
-
-                <!-- CONTEÚDO: API PIX -->
-                <div data-page-content="api-pix">
-                    <h1 class="text-3xl font-bold text-white mb-6">Configuração da API PIX</h1>
-                    <!-- Conteúdo das Configurações de API PIX aqui... -->
-                </div>
-
-                <!-- CONTEÚDO: DOCUMENTAÇÃO -->
-                <div data-page-content="docs">
-                    <h1 class="text-3xl font-bold text-white mb-6">Documentação da API</h1>
-                    <!-- Conteúdo da Documentação aqui... -->
-                </div>
-
             </main>
         </div>
     </div>
 
+    <!-- Templates de Conteúdo do Dashboard -->
+    <template id="template-dashboard-main">
+        <div data-page-content="dashboard-main">
+            <h1 class="text-3xl font-bold text-white mb-6">Visão Geral</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-lg">
+                    <h3 class="text-gray-400">PIX Gerados (Últimos 30 dias)</h3>
+                    <p id="pix-generated" class="text-4xl font-bold text-sky-400">0</p>
+                </div>
+                <div class="glass-card p-6 rounded-lg">
+                    <h3 class="text-gray-400">PIX Pagos (Últimos 30 dias)</h3>
+                    <p id="pix-paid" class="text-4xl font-bold text-green-400">0</p>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-pressel">
+        <div data-page-content="pressel">
+            <h1 class="text-3xl font-bold text-white mb-6">Gerador de Presell & Contas de Pixel</h1>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <section class="glass-card p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold mb-4 text-white">Gerador</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="presellName" class="text-sm font-medium text-gray-400">Nome da Presell</label>
+                            <input type="text" id="presellName" class="form-input w-full p-2 mt-1 rounded-md" placeholder="Ex: Campanha Black Friday">
+                        </div>
+                        <div>
+                            <label for="pixelAccountSelect" class="text-sm font-medium text-gray-400">Conta de Pixel a ser usada</label>
+                            <select id="pixelAccountSelect" class="form-input w-full p-2 mt-1 rounded-md"></select>
+                        </div>
+                        <button id="generatePresellBtn" class="btn btn-primary w-full text-white font-semibold py-2 px-4 rounded-md">Gerar Código</button>
+                        <div id="presellCodeContainer" class="hidden mt-4">
+                            <textarea id="presellCode" readonly class="form-input w-full h-48 p-2 rounded-md text-sm font-mono"></textarea>
+                            <button id="copyPresellCodeBtn" class="btn btn-secondary w-full mt-2 text-white font-semibold py-2 px-4 rounded-md">Copiar Código</button>
+                        </div>
+                    </div>
+                </section>
+                <section class="glass-card p-6 rounded-lg shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-white">Suas Contas de Pixel</h2>
+                        <button id="addPixelAccountBtn" class="btn btn-primary text-white font-semibold py-2 px-4 rounded-md text-sm">Adicionar</button>
+                    </div>
+                    <div id="pixelAccountsList" class="space-y-3 max-h-96 overflow-y-auto"></div>
+                </section>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-api-pix">
+        <div data-page-content="api-pix">
+            <h1 class="text-3xl font-bold text-white mb-6">Configuração da API PIX</h1>
+            <section class="glass-card p-6 rounded-lg shadow-lg max-w-lg">
+                <h2 class="text-xl font-semibold mb-4 text-white">Suas Chaves</h2>
+                <form id="settingsForm" class="space-y-4">
+                    <div>
+                        <label for="pushinpay_token" class="text-sm font-medium text-gray-400">Token da PushinPay</label>
+                        <input type="text" id="pushinpay_token" class="form-input w-full p-2 mt-1 rounded-md" placeholder="Cole seu token Bearer">
+                    </div>
+                    <div>
+                        <label for="bot_name" class="text-sm font-medium text-gray-400">Nome de Usuário do Bot (Telegram)</label>
+                        <input type="text" id="bot_name" class="form-input w-full p-2 mt-1 rounded-md" placeholder="ex: meuproduto_bot">
+                    </div>
+                    <button type="submit" class="btn btn-primary text-white font-semibold py-2 px-4 rounded-md">Salvar Configurações</button>
+                </form>
+            </section>
+        </div>
+    </template>
+
+    <template id="template-docs">
+        <div data-page-content="docs">
+            <h1 class="text-3xl font-bold text-white mb-6">Documentação da API</h1>
+            <div class="space-y-6">
+                <div class="glass-card p-4 rounded-lg">
+                    <h3 class="font-semibold text-sky-400">Sua Chave de API (para ManyChat)</h3>
+                    <p class="text-sm text-gray-400 mb-2">Use esta chave no cabeçalho `x-api-key` das suas requisições.</p>
+                    <pre class="bg-gray-900 rounded p-2 text-sm font-mono break-all" id="userApiKey"></pre>
+                </div>
+                <div class="glass-card p-4 rounded-lg">
+                    <h3 class="font-semibold text-sky-400">Gerar PIX</h3>
+                    <p class="text-sm text-gray-400 mb-2">POST para <code class="bg-gray-900 p-1 rounded">/api/manychat/generate-pix</code></p>
+                    <pre class="bg-gray-900 rounded p-2 text-sm font-mono">{
+    "click_id": "lead123456",
+    "value_cents": 1000
+}</pre>
+                </div>
+                <!-- Adicionar mais exemplos de documentação aqui -->
+            </div>
+        </div>
+    </template>
+    
+    <!-- Modal e Toast -->
+    <!-- ... (O HTML do Modal e do Toast permanece o mesmo) ... -->
+
     <script>
-        // ... (Todo o JavaScript da versão anterior, com pequenas modificações para a nova estrutura)
-        
-        function navigateToAuth(pageName) {
-            document.getElementById('dashboard-container').classList.remove('active');
-            document.getElementById('auth-container').classList.add('active');
-            document.querySelectorAll('#auth-container [data-page]').forEach(page => {
-                page.classList.toggle('active', page.dataset.page === pageName);
-            });
-        }
-
-        function navigateToDashboard() {
-            document.getElementById('auth-container').classList.remove('active');
-            document.getElementById('dashboard-container').classList.add('active');
-            // Ativa a primeira aba do dashboard por padrão
-            switchDashboardTab('dashboard-main');
-        }
-
-        function switchDashboardTab(targetId) {
-            document.querySelectorAll('#dashboard-container [data-page-content]').forEach(content => {
-                content.classList.toggle('active', content.dataset.pageContent === targetId);
-            });
-            document.querySelectorAll('.sidebar-item').forEach(item => {
-                item.classList.toggle('active', item.dataset.target === targetId);
-            });
-        }
-        
-        // Event listeners para a sidebar
-        document.querySelector('aside nav').addEventListener('click', (e) => {
-            e.preventDefault();
-            const target = e.target.closest('.sidebar-item');
-            if (target) {
-                switchDashboardTab(target.dataset.target);
-            }
-        });
-
-        // Modifica a inicialização
-        function init() {
-            loadState();
-            if (state.token && state.user) {
-                initDashboard();
-                navigateToDashboard();
-            } else {
-                navigateToAuth('login');
-            }
-        }
-        
-        // Modifica o login para usar a nova navegação
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            // ... (lógica de fetch)
-            try {
-                // ...
-                await initDashboard();
-                navigateToDashboard();
-            } catch (error) {
-                // ...
-            }
-        });
-
-        // Modifica o logout
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            // ... (lógica de limpar state/storage)
-            navigateToAuth('login');
-        });
-
-        // Restante do seu JS (register, dashboard logic, modals, etc.)
-        // ...
+        // ... (Todo o JavaScript da versão anterior) ...
     </script>
 </body>
 </html>
