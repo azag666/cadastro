@@ -32,30 +32,9 @@
             box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
             background-color: rgba(39, 39, 42, 0.8);
         }
-        .btn {
-            transition: all 0.3s ease;
-            transform-style: preserve-3d;
-        }
-        .btn-primary { 
-            background-color: #0ea5e9; 
-            box-shadow: inset 0 -4px 0 #0284c7;
-        }
-        .btn-primary:hover { 
-            background-color: #38bdf8;
-            transform: translateY(-2px);
-            box-shadow: inset 0 -2px 0 #0284c7, 0 10px 20px rgba(14, 165, 233, 0.2);
-        }
-        .btn-primary:active {
-            transform: translateY(1px);
-            box-shadow: inset 0 0 0 #0284c7;
-        }
-        .btn-danger { background-color: #dc2626; box-shadow: inset 0 -4px 0 #b91c1c; }
-        .btn-danger:hover { background-color: #ef4444; transform: translateY(-2px); box-shadow: inset 0 -2px 0 #b91c1c; }
-        .btn-danger:active { transform: translateY(1px); box-shadow: inset 0 0 0 #b91c1c; }
-        .btn-secondary { background-color: #4b5563; box-shadow: inset 0 -4px 0 #374151; }
-        .btn-secondary:hover { background-color: #6b7280; transform: translateY(-2px); box-shadow: inset 0 -2px 0 #374151; }
-        .btn-secondary:active { transform: translateY(1px); box-shadow: inset 0 0 0 #374151; }
-
+        .btn { transition: all 0.3s ease; }
+        .btn-primary { background-color: #0ea5e9; }
+        .btn-primary:hover { background-color: #38bdf8; }
         .sidebar-item { border-left: 3px solid transparent; transition: all 0.2s; }
         .sidebar-item:hover { background-color: rgba(38, 38, 38, 0.5); border-left-color: #38bdf8; }
         .sidebar-item.active { background-color: rgba(14, 165, 233, 0.1); border-left-color: #0ea5e9; font-weight: 600; color: white; }
@@ -64,10 +43,10 @@
         #auth-container.active, #dashboard-container.active { display: block; animation: fadeIn 0.5s ease-in-out; }
         [data-page] { display: none; }
         [data-page].active { display: flex; }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; } to { opacity: 1; }
-        }
+        [data-page-content] { display: none; }
+        [data-page-content].active { display: block; animation: fadeIn 0.3s ease-in-out; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .modal { display: none; }
         .modal.active { display: flex; }
     </style>
@@ -79,53 +58,26 @@
         <!-- PÁGINA DE LOGIN -->
         <div data-page="login" class="items-center justify-center min-h-screen p-4">
             <div class="w-full max-w-md glass-card p-8 rounded-2xl shadow-2xl">
-                <div class="text-center mb-8">
-                    <svg class="mx-auto h-12 w-auto text-sky-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
-                    <h1 class="text-3xl font-bold mt-4 text-white">Acesse sua Plataforma</h1>
-                    <p class="text-gray-400 mt-2">Bem-vindo de volta!</p>
-                </div>
+                <div class="text-center mb-8"><svg class="mx-auto h-12 w-auto text-sky-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg><h1 class="text-3xl font-bold mt-4 text-white">Acesse sua Plataforma</h1><p class="text-gray-400 mt-2">Bem-vindo de volta!</p></div>
                 <form id="loginForm" class="space-y-6">
-                    <div>
-                        <label for="login-email" class="text-sm font-medium text-gray-400">E-mail</label>
-                        <input type="email" id="login-email" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="voce@exemplo.com">
-                    </div>
-                    <div>
-                        <label for="login-password" class="text-sm font-medium text-gray-400">Senha</label>
-                        <input type="password" id="login-password" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="••••••••">
-                    </div>
+                    <div><label for="login-email" class="text-sm font-medium text-gray-400">E-mail</label><input type="email" id="login-email" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="voce@exemplo.com"></div>
+                    <div><label for="login-password" class="text-sm font-medium text-gray-400">Senha</label><input type="password" id="login-password" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="••••••••"></div>
                     <button type="submit" class="btn btn-primary w-full text-white font-semibold py-3 rounded-md">Entrar</button>
                 </form>
-                <div class="text-center mt-6">
-                    <a href="#" id="showRegister" class="text-sm text-sky-400 hover:text-sky-300">Não tem uma conta? Cadastre-se</a>
-                </div>
+                <div class="text-center mt-6"><a href="#" id="showRegister" class="text-sm text-sky-400 hover:text-sky-300">Não tem uma conta? Cadastre-se</a></div>
             </div>
         </div>
         <!-- PÁGINA DE CADASTRO -->
         <div data-page="register" class="items-center justify-center min-h-screen p-4">
             <div class="w-full max-w-md glass-card p-8 rounded-2xl shadow-2xl">
-                <div class="text-center mb-8">
-                    <svg class="mx-auto h-12 w-auto text-sky-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
-                    <h1 class="text-3xl font-bold mt-4 text-white">Crie sua Conta</h1>
-                    <p class="text-gray-400 mt-2">Rastreamento de conversões com 100% de precisão.</p>
-                </div>
+                <div class="text-center mb-8"><svg class="mx-auto h-12 w-auto text-sky-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg><h1 class="text-3xl font-bold mt-4 text-white">Crie sua Conta</h1><p class="text-gray-400 mt-2">Rastreamento de conversões com 100% de precisão.</p></div>
                 <form id="registerForm" class="space-y-6">
-                    <div>
-                        <label for="register-name" class="text-sm font-medium text-gray-400">Nome Completo</label>
-                        <input type="text" id="register-name" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="Seu nome">
-                    </div>
-                    <div>
-                        <label for="register-email" class="text-sm font-medium text-gray-400">E-mail</label>
-                        <input type="email" id="register-email" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="voce@exemplo.com">
-                    </div>
-                    <div>
-                        <label for="register-password" class="text-sm font-medium text-gray-400">Senha</label>
-                        <input type="password" id="register-password" required minlength="8" class="form-input w-full p-3 mt-1 rounded-md" placeholder="Mínimo 8 caracteres">
-                    </div>
+                    <div><label for="register-name" class="text-sm font-medium text-gray-400">Nome Completo</label><input type="text" id="register-name" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="Seu nome"></div>
+                    <div><label for="register-email" class="text-sm font-medium text-gray-400">E-mail</label><input type="email" id="register-email" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="voce@exemplo.com"></div>
+                    <div><label for="register-password" class="text-sm font-medium text-gray-400">Senha</label><input type="password" id="register-password" required minlength="8" class="form-input w-full p-3 mt-1 rounded-md" placeholder="Mínimo 8 caracteres"></div>
                     <button type="submit" class="btn btn-primary w-full text-white font-semibold py-3 rounded-md">Criar Conta</button>
                 </form>
-                <div class="text-center mt-6">
-                    <a href="#" id="showLogin" class="text-sm text-sky-400 hover:text-sky-300">Já tem uma conta? Faça Login</a>
-                </div>
+                <div class="text-center mt-6"><a href="#" id="showLogin" class="text-sm text-sky-400 hover:text-sky-300">Já tem uma conta? Faça Login</a></div>
             </div>
         </div>
     </div>
@@ -133,168 +85,84 @@
     <!-- Container do Dashboard -->
     <div id="dashboard-container">
         <div class="flex h-screen">
-            <!-- Sidebar -->
             <aside class="w-64 glass-card p-4 flex flex-col">
-                <div class="text-center mb-10">
-                    <svg class="mx-auto h-10 w-auto text-sky-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>
-                    <h1 class="text-2xl font-bold mt-2 text-white">HotTrack</h1>
-                </div>
+                <div class="text-center mb-10"><svg class="mx-auto h-10 w-auto text-sky-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg><h1 class="text-2xl font-bold mt-2 text-white">HotTrack</h1></div>
                 <nav id="sidebarNav" class="flex flex-col space-y-2">
-                    <a href="#" data-target="dashboard-main" class="sidebar-item text-gray-300 hover:text-white p-3 rounded-lg flex items-center">
-                        <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                        Dashboard
-                    </a>
-                    <a href="#" data-target="pressel" class="sidebar-item text-gray-300 hover:text-white p-3 rounded-lg flex items-center">
-                        <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                        Pressel
-                    </a>
-                    <a href="#" data-target="api-pix" class="sidebar-item text-gray-300 hover:text-white p-3 rounded-lg flex items-center">
-                        <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" /></svg>
-                        API Pix
-                    </a>
-                    <a href="#" data-target="docs" class="sidebar-item text-gray-300 hover:text-white p-3 rounded-lg flex items-center">
-                        <svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                        Documentação
-                    </a>
+                    <a href="#" data-target="dashboard-main" class="sidebar-item text-gray-300 hover:text-white p-3 rounded-lg flex items-center"><svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>Dashboard</a>
+                    <a href="#" data-target="pressel" class="sidebar-item text-gray-300 hover:text-white p-3 rounded-lg flex items-center"><svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>Pressel</a>
+                    <a href="#" data-target="api-pix" class="sidebar-item text-gray-300 hover:text-white p-3 rounded-lg flex items-center"><svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" /></svg>API Pix</a>
+                    <a href="#" data-target="docs" class="sidebar-item text-gray-300 hover:text-white p-3 rounded-lg flex items-center"><svg class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>Documentação</a>
                 </nav>
-                <div class="mt-auto">
-                     <button id="logoutButton" class="w-full btn btn-secondary text-white font-semibold py-2 px-4 rounded-md">Sair</button>
-                </div>
+                <div class="mt-auto"><button id="logoutButton" class="w-full btn btn-secondary text-white font-semibold py-2 px-4 rounded-md">Sair</button></div>
             </aside>
-
-            <!-- Conteúdo Principal -->
-            <main class="flex-1 p-8 overflow-y-auto">
-                <div id="dashboard-content-container">
-                    <!-- Conteúdo dinâmico será injetado aqui -->
-                </div>
-            </main>
+            <main class="flex-1 p-8 overflow-y-auto"><div id="dashboard-content-container"></div></main>
         </div>
     </div>
 
-    <!-- Templates de Conteúdo do Dashboard -->
+    <!-- Templates de Conteúdo -->
     <template id="template-dashboard-main">
-        <div data-page-content="dashboard-main">
+        <div>
             <h1 class="text-3xl font-bold text-white mb-6">Visão Geral</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-card p-6 rounded-lg">
-                    <h3 class="text-gray-400">PIX Gerados (Últimos 30 dias)</h3>
-                    <p id="pix-generated" class="text-4xl font-bold text-sky-400">0</p>
-                </div>
-                <div class="glass-card p-6 rounded-lg">
-                    <h3 class="text-gray-400">PIX Pagos (Últimos 30 dias)</h3>
-                    <p id="pix-paid" class="text-4xl font-bold text-green-400">0</p>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-lg"><h3 class="text-gray-400">PIX Gerados (30 dias)</h3><p id="pix-generated" class="text-4xl font-bold text-sky-400">0</p></div>
+                <div class="glass-card p-6 rounded-lg"><h3 class="text-gray-400">PIX Pagos (30 dias)</h3><p id="pix-paid" class="text-4xl font-bold text-green-400">0</p></div>
+                <div class="glass-card p-6 rounded-lg"><h3 class="text-gray-400">Taxa de Conversão</h3><p id="conversion-rate" class="text-4xl font-bold text-amber-400">0%</p></div>
             </div>
+            <div class="mt-8 glass-card p-6 rounded-lg"><h3 class="text-xl font-semibold text-white mb-4">Estados com Maior Tráfego</h3><div id="top-states-list"></div></div>
         </div>
     </template>
 
     <template id="template-pressel">
-        <div data-page-content="pressel">
+        <div>
             <h1 class="text-3xl font-bold text-white mb-6">Gerador de Presell & Contas de Pixel</h1>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <section class="glass-card p-6 rounded-lg shadow-lg">
-                    <h2 class="text-xl font-semibold mb-4 text-white">Gerador</h2>
+                <section class="glass-card p-6 rounded-lg"><h2 class="text-xl font-semibold mb-4 text-white">Gerador</h2>
                     <div class="space-y-4">
-                        <div>
-                            <label for="presellName" class="text-sm font-medium text-gray-400">Nome da Presell</label>
-                            <input type="text" id="presellName" class="form-input w-full p-2 mt-1 rounded-md" placeholder="Ex: Campanha Black Friday">
-                        </div>
-                        <div>
-                            <label for="pixelAccountSelect" class="text-sm font-medium text-gray-400">Conta de Pixel a ser usada</label>
-                            <select id="pixelAccountSelect" class="form-input w-full p-2 mt-1 rounded-md"></select>
-                        </div>
+                        <div><label for="presellName" class="text-sm font-medium text-gray-400">Nome da Presell</label><input type="text" id="presellName" class="form-input w-full p-2 mt-1 rounded-md" placeholder="Ex: Campanha Black Friday"></div>
+                        <div><label for="pixelAccountSelect" class="text-sm font-medium text-gray-400">Conta de Pixel</label><select id="pixelAccountSelect" class="form-input w-full p-2 mt-1 rounded-md"></select></div>
+                        <div><label for="bot_name_presell" class="text-sm font-medium text-gray-400">Bot do Telegram</label><input type="text" id="bot_name_presell" class="form-input w-full p-2 mt-1 rounded-md" placeholder="usuario_do_bot"></div>
+                        <div><label for="white_page_link" class="text-sm font-medium text-gray-400">Página Branca (Cloaker)</label><input type="url" id="white_page_link" class="form-input w-full p-2 mt-1 rounded-md" placeholder="https://seusite.com/oferta"></div>
                         <button id="generatePresellBtn" class="btn btn-primary w-full text-white font-semibold py-2 px-4 rounded-md">Gerar Código</button>
-                        <div id="presellCodeContainer" class="hidden mt-4">
-                            <textarea id="presellCode" readonly class="form-input w-full h-48 p-2 rounded-md text-sm font-mono"></textarea>
-                            <button id="copyPresellCodeBtn" class="btn btn-secondary w-full mt-2 text-white font-semibold py-2 px-4 rounded-md">Copiar Código</button>
-                        </div>
+                        <div id="presellCodeContainer" class="hidden mt-4"><textarea id="presellCode" readonly class="form-input w-full h-48 p-2 rounded-md text-sm font-mono"></textarea><button id="copyPresellCodeBtn" class="btn btn-secondary w-full mt-2 text-white font-semibold py-2 px-4 rounded-md">Copiar Código</button></div>
                     </div>
                 </section>
-                <section class="glass-card p-6 rounded-lg shadow-lg">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-semibold text-white">Suas Contas de Pixel</h2>
-                        <button id="addPixelAccountBtn" class="btn btn-primary text-white font-semibold py-2 px-4 rounded-md text-sm">Adicionar</button>
-                    </div>
-                    <div id="pixelAccountsList" class="space-y-3 max-h-96 overflow-y-auto"></div>
-                </section>
+                <section class="glass-card p-6 rounded-lg"><div class="flex justify-between items-center mb-4"><h2 class="text-xl font-semibold text-white">Suas Contas de Pixel</h2><button id="addPixelAccountBtn" class="btn btn-primary text-white font-semibold py-2 px-4 rounded-md text-sm">Adicionar</button></div><div id="pixelAccountsList" class="space-y-3 max-h-96 overflow-y-auto"></div></section>
             </div>
         </div>
     </template>
 
     <template id="template-api-pix">
-        <div data-page-content="api-pix">
+        <div>
             <h1 class="text-3xl font-bold text-white mb-6">Configuração da API PIX</h1>
-            <section class="glass-card p-6 rounded-lg shadow-lg max-w-lg">
-                <h2 class="text-xl font-semibold mb-4 text-white">Suas Chaves</h2>
+            <section class="glass-card p-6 rounded-lg max-w-lg">
+                <h2 class="text-xl font-semibold mb-4 text-white">Token PushinPay</h2>
                 <form id="settingsForm" class="space-y-4">
-                    <div>
-                        <label for="pushinpay_token" class="text-sm font-medium text-gray-400">Token da PushinPay</label>
-                        <input type="text" id="pushinpay_token" class="form-input w-full p-2 mt-1 rounded-md" placeholder="Cole seu token Bearer">
-                    </div>
-                    <div>
-                        <label for="bot_name" class="text-sm font-medium text-gray-400">Nome de Usuário do Bot (Telegram)</label>
-                        <input type="text" id="bot_name" class="form-input w-full p-2 mt-1 rounded-md" placeholder="ex: meuproduto_bot">
-                    </div>
-                    <button type="submit" class="btn btn-primary text-white font-semibold py-2 px-4 rounded-md">Salvar Configurações</button>
+                    <div><label for="pushinpay_token" class="text-sm font-medium text-gray-400">Seu Token</label><input type="text" id="pushinpay_token" class="form-input w-full p-2 mt-1 rounded-md" placeholder="Cole seu token Bearer da PushinPay aqui"></div>
+                    <button type="submit" class="btn btn-primary text-white font-semibold py-2 px-4 rounded-md">Salvar Token</button>
                 </form>
             </section>
         </div>
     </template>
 
     <template id="template-docs">
-        <div data-page-content="docs">
-            <h1 class="text-3xl font-bold text-white mb-6">Documentação da API</h1>
+        <div>
+            <h1 class="text-3xl font-bold text-white mb-6">Documentação da API (para ManyChat)</h1>
             <div class="space-y-6">
-                <div class="glass-card p-4 rounded-lg">
-                    <h3 class="font-semibold text-sky-400">Sua Chave de API (para ManyChat)</h3>
-                    <p class="text-sm text-gray-400 mb-2">Use esta chave no cabeçalho `x-api-key` das suas requisições.</p>
-                    <pre class="bg-gray-900 rounded p-2 text-sm font-mono break-all" id="userApiKey"></pre>
-                </div>
-                <div class="glass-card p-4 rounded-lg">
-                    <h3 class="font-semibold text-sky-400">Gerar PIX</h3>
-                    <p class="text-sm text-gray-400 mb-2">POST para <code class="bg-gray-900 p-1 rounded">/api/manychat/generate-pix</code></p>
-                    <pre class="bg-gray-900 rounded p-2 text-sm font-mono">{
+                <div class="glass-card p-4 rounded-lg"><h3 class="font-semibold text-sky-400">Sua Chave de API</h3><p class="text-sm text-gray-400 mb-2">Use esta chave no cabeçalho `x-api-key` de todas as suas requisições.</p><pre class="bg-gray-900 rounded p-2 text-sm font-mono break-all" id="userApiKey"></pre></div>
+                <div class="glass-card p-4 rounded-lg"><h3 class="font-semibold text-sky-400">1. Gerar PIX</h3><p class="text-sm text-gray-400 mb-2">Envie uma requisição POST para <code class="bg-gray-900 p-1 rounded">/api/manychat/generate-pix</code> com o seguinte corpo:</p><pre class="bg-gray-900 rounded p-2 text-sm font-mono">{
     "click_id": "lead123456",
     "value_cents": 1000
-}</pre>
-                </div>
+}</pre></div>
+                <div class="glass-card p-4 rounded-lg"><h3 class="font-semibold text-sky-400">2. Consultar PIX</h3><p class="text-sm text-gray-400 mb-2">Envie uma requisição GET para <code class="bg-gray-900 p-1 rounded">/api/manychat/check-pix/{pix_id}</code>. Substitua `{pix_id}` pelo ID retornado no passo anterior.</p></div>
+                <div class="glass-card p-4 rounded-lg"><h3 class="font-semibold text-sky-400">3. Consultar Cidade</h3><p class="text-sm text-gray-400 mb-2">Envie uma requisição POST para <code class="bg-gray-900 p-1 rounded">/api/manychat/get-city</code> com o seguinte corpo:</p><pre class="bg-gray-900 rounded p-2 text-sm font-mono">{
+    "click_id": "lead123456"
+}</pre></div>
             </div>
         </div>
     </template>
     
-    <!-- Modal para Adicionar/Editar Conta de Pixel -->
-    <div id="pixelModal" class="modal fixed inset-0 z-50 items-center justify-center">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modalBackdrop"></div>
-        <div class="glass-card rounded-lg shadow-xl p-6 w-full max-w-lg relative">
-            <h3 id="modalTitle" class="text-lg font-medium leading-6 text-white mb-4">Adicionar Nova Conta de Pixel</h3>
-            <form id="pixelForm">
-                <input type="hidden" id="pixelAccountId">
-                <div class="space-y-4">
-                    <div>
-                        <label for="account_name" class="text-sm font-medium text-gray-400">Nome da Conta</label>
-                        <input type="text" id="account_name" required class="form-input w-full p-2 mt-1 rounded-md" placeholder="Ex: Produto X - Conta 1">
-                    </div>
-                    <div>
-                        <label for="pixel_id" class="text-sm font-medium text-gray-400">ID do Pixel da Meta</label>
-                        <input type="text" id="pixel_id" required class="form-input w-full p-2 mt-1 rounded-md" placeholder="123456789012345">
-                    </div>
-                    <div>
-                        <label for="meta_api_token" class="text-sm font-medium text-gray-400">Token da API de Conversões da Meta</label>
-                        <textarea id="meta_api_token" required class="form-input w-full p-2 mt-1 rounded-md" rows="4" placeholder="EAA..."></textarea>
-                    </div>
-                </div>
-                <div class="mt-6 flex justify-end space-x-3">
-                    <button type="button" id="cancelPixelModal" class="btn btn-secondary text-white font-semibold py-2 px-4 rounded-md">Cancelar</button>
-                    <button type="submit" class="btn btn-primary text-white font-semibold py-2 px-4 rounded-md">Salvar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed top-5 right-5 text-white py-2 px-4 rounded-md shadow-lg transform translate-x-full transition-transform duration-300">
-        <p id="toastMessage"></p>
-    </div>
+    <div id="pixelModal" class="modal fixed inset-0 z-50 items-center justify-center"><div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modalBackdrop"></div><div class="glass-card rounded-lg shadow-xl p-6 w-full max-w-lg relative"><h3 id="modalTitle" class="text-lg font-medium leading-6 text-white mb-4"></h3><form id="pixelForm"><input type="hidden" id="pixelAccountId"><div class="space-y-4"><div><label for="account_name" class="text-sm font-medium text-gray-400">Nome da Conta</label><input type="text" id="account_name" required class="form-input w-full p-2 mt-1 rounded-md" placeholder="Ex: Produto X - Conta 1"></div><div><label for="pixel_id" class="text-sm font-medium text-gray-400">ID do Pixel da Meta</label><input type="text" id="pixel_id" required class="form-input w-full p-2 mt-1 rounded-md" placeholder="123456789012345"></div><div><label for="meta_api_token" class="text-sm font-medium text-gray-400">Token da API de Conversões da Meta</label><textarea id="meta_api_token" required class="form-input w-full p-2 mt-1 rounded-md" rows="4" placeholder="EAA..."></textarea></div></div><div class="mt-6 flex justify-end space-x-3"><button type="button" id="cancelPixelModal" class="btn btn-secondary text-white font-semibold py-2 px-4 rounded-md">Cancelar</button><button type="submit" class="btn btn-primary text-white font-semibold py-2 px-4 rounded-md">Salvar</button></div></form></div></div>
+    <div id="toast" class="fixed top-5 right-5 text-white py-2 px-4 rounded-md shadow-lg transform translate-x-full transition-transform duration-300"><p id="toastMessage"></p></div>
 
     <script>
         const API_BASE_URL = 'https://hottrack.vercel.app';
@@ -303,7 +171,7 @@
         const dashboardContainer = document.getElementById('dashboard-container');
         const dashboardContentContainer = document.getElementById('dashboard-content-container');
 
-        const state = { user: null, token: null, dashboardData: { pixels: [], settings: {}, stats: {} } };
+        const state = { user: null, token: null, dashboardData: { pixels: [], settings: {}, stats: {}, topStates: [] } };
 
         function navigateToAuth(pageName) {
             dashboardContainer.classList.remove('active');
@@ -411,9 +279,10 @@
                 state.dashboardData.pixels = data.pixels;
                 state.dashboardData.settings = data.settings;
                 state.dashboardData.stats = data.stats;
+                state.dashboardData.topStates = data.topStates;
             } catch (error) {
                 showToast(error.message, 'error');
-                if (error.message.includes('expirado')) {
+                if (error.message.includes('expirado') || error.message.includes('inválido')) {
                     document.getElementById('logoutButton').click();
                 }
             }
@@ -421,12 +290,24 @@
         
         function bindDashboardEvents(pageId) {
             if (pageId === 'dashboard-main') {
-                document.getElementById('pix-generated').textContent = state.dashboardData.stats.pix_generated;
-                document.getElementById('pix-paid').textContent = state.dashboardData.stats.pix_paid;
+                const stats = state.dashboardData.stats;
+                document.getElementById('pix-generated').textContent = stats.pix_generated;
+                document.getElementById('pix-paid').textContent = stats.pix_paid;
+                const conversionRate = stats.pix_generated > 0 ? ((stats.pix_paid / stats.pix_generated) * 100).toFixed(1) : 0;
+                document.getElementById('conversion-rate').textContent = `${conversionRate}%`;
+                
+                const topStatesList = document.getElementById('top-states-list');
+                topStatesList.innerHTML = '';
+                if(state.dashboardData.topStates && state.dashboardData.topStates.length > 0){
+                    state.dashboardData.topStates.forEach(s => {
+                        topStatesList.innerHTML += `<div class="flex justify-between items-center text-gray-300 py-2 border-b border-gray-700"><span>${s.state || 'Desconhecido'}</span><span>${s.count} cliques</span></div>`;
+                    });
+                } else {
+                    topStatesList.innerHTML = `<p class="text-gray-500">Nenhum dado de tráfego ainda.</p>`;
+                }
             }
             if (pageId === 'api-pix') {
                 document.getElementById('pushinpay_token').value = state.dashboardData.settings.pushinpay_token || '';
-                document.getElementById('bot_name').value = state.dashboardData.settings.bot_name || '';
                 document.getElementById('settingsForm').addEventListener('submit', onSettingsFormSubmit);
             }
             if (pageId === 'pressel') {
@@ -445,12 +326,11 @@
             e.preventDefault();
             const data = {
                 pushinpay_token: document.getElementById('pushinpay_token').value,
-                bot_name: document.getElementById('bot_name').value
             };
             try {
                 await apiRequest('/api/sellers/update-settings', 'PUT', data);
-                showToast('Configurações salvas com sucesso!', 'success');
-                state.dashboardData.settings = data; // Update local state
+                showToast('Token salvo com sucesso!', 'success');
+                state.dashboardData.settings.pushinpay_token = data.pushinpay_token;
             } catch (error) {
                 showToast(error.message, 'error');
             }
@@ -468,14 +348,8 @@
                 state.dashboardData.pixels.forEach(acc => {
                     pixelList.innerHTML += `
                         <div class="bg-gray-700/50 p-3 rounded-md flex justify-between items-center">
-                            <div>
-                                <p class="font-semibold">${acc.account_name}</p>
-                                <p class="text-sm text-gray-400 font-mono">Pixel ID: ${acc.pixel_id}</p>
-                            </div>
-                            <div class="space-x-2">
-                                <button data-id="${acc.id}" class="edit-pixel btn btn-secondary text-xs py-1 px-2 rounded">Editar</button>
-                                <button data-id="${acc.id}" class="delete-pixel btn btn-danger text-xs py-1 px-2 rounded">Excluir</button>
-                            </div>
+                            <div><p class="font-semibold">${acc.account_name}</p><p class="text-sm text-gray-400 font-mono">Pixel ID: ${acc.pixel_id}</p></div>
+                            <div class="space-x-2"><button data-id="${acc.id}" class="edit-pixel btn btn-secondary text-xs py-1 px-2 rounded-md">Editar</button><button data-id="${acc.id}" class="delete-pixel btn btn-danger text-xs py-1 px-2 rounded-md">Excluir</button></div>
                         </div>`;
                     pixelSelect.innerHTML += `<option value="${acc.id}">${acc.account_name}</option>`;
                 });
@@ -549,13 +423,13 @@
         function onGeneratePresell() {
             const presellName = document.getElementById('presellName').value;
             const selectedPixelAccountId = document.getElementById('pixelAccountSelect').value;
+            const botName = document.getElementById('bot_name_presell').value;
+            const whitePageLink = document.getElementById('white_page_link').value;
             
-            if (!presellName || !selectedPixelAccountId) return showToast('Preencha o nome e selecione uma conta.', 'error');
+            if (!presellName || !selectedPixelAccountId || !botName || !whitePageLink) return showToast('Preencha todos os campos do gerador.', 'error');
             
-            const botName = state.dashboardData.settings.bot_name;
             const pixelAccount = state.dashboardData.pixels.find(p => p.id == selectedPixelAccountId);
-            if (!botName) return showToast('Salve o nome do seu bot nas configurações.', 'error');
-
+            
             const presellTemplate = `
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -565,11 +439,12 @@
     const SELLER_API_KEY = '${state.user.api_key}';
     const TELEGRAM_USERNAME = '${botName}';
     const API_URL = '${API_BASE_URL}/api/registerClick';
+    const WHITE_PAGE_URL = '${whitePageLink}';
     const isBot = () => /facebookexternalhit|facebot|googlebot|bingbot|crawler|spider|preview/i.test(navigator.userAgent);
     const getCookie = n => { const v = \`; \${document.cookie}\`; const p = v.split(\`; \${n}=\`); return p.length === 2 ? p.pop().split(';').shift() : null; };
     const setCookie = (n, v, d=90) => { const e = new Date(Date.now() + d*864e5).toUTCString(); document.cookie = \`\${n}=\${v}; expires=\${e}; path=/; SameSite=Lax; Secure\`; };
     async function handleRedirect() {
-      if (isBot()) { window.location.replace('https://google.com'); return; }
+      if (isBot()) { window.location.replace(WHITE_PAGE_URL); return; }
       const p = new URLSearchParams(window.location.search);
       let fbp = getCookie('_fbp');
       if (!fbp) { fbp = \`fb.1.\${Date.now()}.\${Math.floor(Math.random() * 1e16)}\`; setCookie('_fbp', fbp); }
