@@ -64,9 +64,7 @@
         #auth-container.active, #dashboard-container.active { display: block; animation: fadeIn 0.5s ease-in-out; }
         [data-page] { display: none; }
         [data-page].active { display: flex; }
-        [data-page-content] { display: none; }
-        [data-page-content].active { display: block; animation: fadeIn 0.3s ease-in-out; }
-
+        
         @keyframes fadeIn {
             from { opacity: 0; } to { opacity: 1; }
         }
@@ -260,16 +258,375 @@
     "value_cents": 1000
 }</pre>
                 </div>
-                <!-- Adicionar mais exemplos de documentação aqui -->
             </div>
         </div>
     </template>
     
-    <!-- Modal e Toast -->
-    <!-- ... (O HTML do Modal e do Toast permanece o mesmo) ... -->
+    <!-- Modal para Adicionar/Editar Conta de Pixel -->
+    <div id="pixelModal" class="modal fixed inset-0 z-50 items-center justify-center">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modalBackdrop"></div>
+        <div class="glass-card rounded-lg shadow-xl p-6 w-full max-w-lg relative">
+            <h3 id="modalTitle" class="text-lg font-medium leading-6 text-white mb-4">Adicionar Nova Conta de Pixel</h3>
+            <form id="pixelForm">
+                <input type="hidden" id="pixelAccountId">
+                <div class="space-y-4">
+                    <div>
+                        <label for="account_name" class="text-sm font-medium text-gray-400">Nome da Conta</label>
+                        <input type="text" id="account_name" required class="form-input w-full p-2 mt-1 rounded-md" placeholder="Ex: Produto X - Conta 1">
+                    </div>
+                    <div>
+                        <label for="pixel_id" class="text-sm font-medium text-gray-400">ID do Pixel da Meta</label>
+                        <input type="text" id="pixel_id" required class="form-input w-full p-2 mt-1 rounded-md" placeholder="123456789012345">
+                    </div>
+                    <div>
+                        <label for="meta_api_token" class="text-sm font-medium text-gray-400">Token da API de Conversões da Meta</label>
+                        <textarea id="meta_api_token" required class="form-input w-full p-2 mt-1 rounded-md" rows="4" placeholder="EAA..."></textarea>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button" id="cancelPixelModal" class="btn btn-secondary text-white font-semibold py-2 px-4 rounded-md">Cancelar</button>
+                    <button type="submit" class="btn btn-primary text-white font-semibold py-2 px-4 rounded-md">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 right-5 text-white py-2 px-4 rounded-md shadow-lg transform translate-x-full transition-transform duration-300">
+        <p id="toastMessage"></p>
+    </div>
 
     <script>
-        // ... (Todo o JavaScript da versão anterior) ...
+        const API_BASE_URL = 'https://hottrack.vercel.app';
+        
+        const authContainer = document.getElementById('auth-container');
+        const dashboardContainer = document.getElementById('dashboard-container');
+        const dashboardContentContainer = document.getElementById('dashboard-content-container');
+
+        const state = { user: null, token: null, dashboardData: { pixels: [], settings: {}, stats: {} } };
+
+        function navigateToAuth(pageName) {
+            dashboardContainer.classList.remove('active');
+            authContainer.classList.add('active');
+            document.querySelectorAll('#auth-container [data-page]').forEach(page => {
+                page.classList.toggle('active', page.dataset.page === pageName);
+            });
+        }
+
+        function navigateToDashboard() {
+            authContainer.classList.remove('active');
+            dashboardContainer.classList.add('active');
+            switchDashboardTab('dashboard-main');
+        }
+
+        function switchDashboardTab(targetId) {
+            const template = document.getElementById(`template-${targetId}`);
+            if (template) {
+                dashboardContentContainer.innerHTML = '';
+                dashboardContentContainer.appendChild(template.content.cloneNode(true));
+                bindDashboardEvents(targetId);
+            }
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.toggle('active', item.dataset.target === targetId);
+            });
+        }
+        
+        document.getElementById('sidebarNav').addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = e.target.closest('.sidebar-item');
+            if (target) {
+                switchDashboardTab(target.dataset.target);
+            }
+        });
+
+        function saveState() {
+            localStorage.setItem('hottrack_token', state.token);
+            localStorage.setItem('hottrack_user', JSON.stringify(state.user));
+        }
+
+        function loadState() {
+            state.token = localStorage.getItem('hottrack_token');
+            const user = localStorage.getItem('hottrack_user');
+            if (user) state.user = JSON.parse(user);
+        }
+
+        async function apiRequest(endpoint, method = 'GET', body = null) {
+            const headers = { 'Content-Type': 'application/json' };
+            if (state.token) headers['Authorization'] = `Bearer ${state.token}`;
+            
+            const options = { method, headers };
+            if (body) options.body = JSON.stringify(body);
+
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+            const data = await response.json();
+
+            if (!response.ok) throw new Error(data.message || 'Ocorreu um erro.');
+            return data;
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                const data = await apiRequest('/api/sellers/login', 'POST', { email, password });
+                state.user = data.seller;
+                state.token = data.token;
+                saveState();
+                await initDashboard();
+                navigateToDashboard();
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            try {
+                await apiRequest('/api/sellers/register', 'POST', { name, email, password });
+                showToast('Cadastro realizado com sucesso! Faça o login.', 'success');
+                navigateToAuth('login');
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        });
+
+        document.getElementById('logoutButton').addEventListener('click', () => {
+            state.user = null;
+            state.token = null;
+            localStorage.clear();
+            navigateToAuth('login');
+        });
+        
+        async function initDashboard() {
+            await fetchDashboardData();
+        }
+
+        async function fetchDashboardData() {
+            try {
+                const data = await apiRequest('/api/dashboard/data');
+                state.dashboardData.pixels = data.pixels;
+                state.dashboardData.settings = data.settings;
+                state.dashboardData.stats = data.stats;
+            } catch (error) {
+                showToast(error.message, 'error');
+                if (error.message.includes('expirado')) {
+                    document.getElementById('logoutButton').click();
+                }
+            }
+        }
+        
+        function bindDashboardEvents(pageId) {
+            if (pageId === 'dashboard-main') {
+                document.getElementById('pix-generated').textContent = state.dashboardData.stats.pix_generated;
+                document.getElementById('pix-paid').textContent = state.dashboardData.stats.pix_paid;
+            }
+            if (pageId === 'api-pix') {
+                document.getElementById('pushinpay_token').value = state.dashboardData.settings.pushinpay_token || '';
+                document.getElementById('bot_name').value = state.dashboardData.settings.bot_name || '';
+                document.getElementById('settingsForm').addEventListener('submit', onSettingsFormSubmit);
+            }
+            if (pageId === 'pressel') {
+                renderPixelAccounts();
+                document.getElementById('addPixelAccountBtn').addEventListener('click', openPixelModal);
+                document.getElementById('pixelAccountsList').addEventListener('click', onPixelListClick);
+                document.getElementById('generatePresellBtn').addEventListener('click', onGeneratePresell);
+                document.getElementById('copyPresellCodeBtn').addEventListener('click', onCopyPresellCode);
+            }
+            if (pageId === 'docs') {
+                document.getElementById('userApiKey').textContent = state.user.api_key;
+            }
+        }
+
+        async function onSettingsFormSubmit(e) {
+            e.preventDefault();
+            const data = {
+                pushinpay_token: document.getElementById('pushinpay_token').value,
+                bot_name: document.getElementById('bot_name').value
+            };
+            try {
+                await apiRequest('/api/sellers/update-settings', 'PUT', data);
+                showToast('Configurações salvas com sucesso!', 'success');
+                state.dashboardData.settings = data; // Update local state
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        }
+
+        function renderPixelAccounts() {
+            const pixelList = document.getElementById('pixelAccountsList');
+            const pixelSelect = document.getElementById('pixelAccountSelect');
+            pixelList.innerHTML = '';
+            pixelSelect.innerHTML = '<option value="">Selecione uma conta</option>';
+
+            if (state.dashboardData.pixels.length === 0) {
+                pixelList.innerHTML = '<p class="text-gray-400">Nenhuma conta de pixel cadastrada.</p>';
+            } else {
+                state.dashboardData.pixels.forEach(acc => {
+                    pixelList.innerHTML += `
+                        <div class="bg-gray-700/50 p-3 rounded-md flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold">${acc.account_name}</p>
+                                <p class="text-sm text-gray-400 font-mono">Pixel ID: ${acc.pixel_id}</p>
+                            </div>
+                            <div class="space-x-2">
+                                <button data-id="${acc.id}" class="edit-pixel btn btn-secondary text-xs py-1 px-2 rounded">Editar</button>
+                                <button data-id="${acc.id}" class="delete-pixel btn btn-danger text-xs py-1 px-2 rounded">Excluir</button>
+                            </div>
+                        </div>`;
+                    pixelSelect.innerHTML += `<option value="${acc.id}">${acc.account_name}</option>`;
+                });
+            }
+        }
+        
+        const pixelModal = document.getElementById('pixelModal');
+        const pixelForm = document.getElementById('pixelForm');
+
+        function openPixelModal() {
+            pixelForm.reset();
+            document.getElementById('pixelAccountId').value = '';
+            document.getElementById('modalTitle').textContent = 'Adicionar Nova Conta de Pixel';
+            pixelModal.classList.add('active');
+        }
+
+        document.getElementById('cancelPixelModal').addEventListener('click', () => pixelModal.classList.remove('active'));
+        document.getElementById('modalBackdrop').addEventListener('click', () => pixelModal.classList.remove('active'));
+
+        pixelForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('pixelAccountId').value;
+            const data = {
+                account_name: document.getElementById('account_name').value,
+                pixel_id: document.getElementById('pixel_id').value,
+                meta_api_token: document.getElementById('meta_api_token').value,
+            };
+            try {
+                if (id) {
+                    await apiRequest(`/api/pixels/${id}`, 'PUT', data);
+                    showToast('Conta de pixel atualizada!', 'success');
+                } else {
+                    await apiRequest('/api/pixels', 'POST', data);
+                    showToast('Conta de pixel adicionada!', 'success');
+                }
+                pixelModal.classList.remove('active');
+                await fetchDashboardData();
+                renderPixelAccounts();
+            } catch (error) {
+                showToast(error.message, 'error');
+            }
+        });
+
+        async function onPixelListClick(e) {
+            const id = e.target.dataset.id;
+            if (e.target.classList.contains('edit-pixel')) {
+                const acc = state.dashboardData.pixels.find(p => p.id == id);
+                if (acc) {
+                    document.getElementById('pixelAccountId').value = acc.id;
+                    document.getElementById('account_name').value = acc.account_name;
+                    document.getElementById('pixel_id').value = acc.pixel_id;
+                    document.getElementById('meta_api_token').value = acc.meta_api_token;
+                    document.getElementById('modalTitle').textContent = 'Editar Conta de Pixel';
+                    pixelModal.classList.add('active');
+                }
+            }
+            if (e.target.classList.contains('delete-pixel')) {
+                if (confirm('Tem certeza que deseja excluir esta conta?')) {
+                    try {
+                        await apiRequest(`/api/pixels/${id}`, 'DELETE');
+                        showToast('Conta de pixel excluída!', 'success');
+                        await fetchDashboardData();
+                        renderPixelAccounts();
+                    } catch (error) {
+                        showToast(error.message, 'error');
+                    }
+                }
+            }
+        }
+
+        function onGeneratePresell() {
+            const presellName = document.getElementById('presellName').value;
+            const selectedPixelAccountId = document.getElementById('pixelAccountSelect').value;
+            
+            if (!presellName || !selectedPixelAccountId) return showToast('Preencha o nome e selecione uma conta.', 'error');
+            
+            const botName = state.dashboardData.settings.bot_name;
+            const pixelAccount = state.dashboardData.pixels.find(p => p.id == selectedPixelAccountId);
+            if (!botName) return showToast('Salve o nome do seu bot nas configurações.', 'error');
+
+            const presellTemplate = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>${presellName}</title>
+  <script>
+    const SELLER_API_KEY = '${state.user.api_key}';
+    const TELEGRAM_USERNAME = '${botName}';
+    const API_URL = '${API_BASE_URL}/api/registerClick';
+    const isBot = () => /facebookexternalhit|facebot|googlebot|bingbot|crawler|spider|preview/i.test(navigator.userAgent);
+    const getCookie = n => { const v = \`; \${document.cookie}\`; const p = v.split(\`; \${n}=\`); return p.length === 2 ? p.pop().split(';').shift() : null; };
+    const setCookie = (n, v, d=90) => { const e = new Date(Date.now() + d*864e5).toUTCString(); document.cookie = \`\${n}=\${v}; expires=\${e}; path=/; SameSite=Lax; Secure\`; };
+    async function handleRedirect() {
+      if (isBot()) { window.location.replace('https://google.com'); return; }
+      const p = new URLSearchParams(window.location.search);
+      let fbp = getCookie('_fbp');
+      if (!fbp) { fbp = \`fb.1.\${Date.now()}.\${Math.floor(Math.random() * 1e16)}\`; setCookie('_fbp', fbp); }
+      let c = null;
+      try {
+        const r = await fetch(API_URL, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ sellerApiKey: SELLER_API_KEY, referer: document.referrer||'', fbclid: p.get('fbclid')||'', fbp: fbp||'' }) });
+        if(r.ok) c = (await r.json()).click_id;
+      } catch (e) {}
+      let u = \`https://t.me/\${TELEGRAM_USERNAME}\`;
+      if(c) u += \`?start=\${c}\`;
+      window.location.replace(u);
+    }
+    handleRedirect();
+  <\/script>
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '${pixelAccount.pixel_id}');
+    fbq('track', 'PageView');
+  <\/script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=${pixelAccount.pixel_id}&ev=PageView&noscript=1"/></noscript>
+</head>
+<body><p>Redirecionando...</p></body>
+</html>`;
+            
+            document.getElementById('presellCode').value = presellTemplate.trim();
+            document.getElementById('presellCodeContainer').classList.remove('hidden');
+        }
+
+        function onCopyPresellCode() {
+            document.getElementById('presellCode').select();
+            document.execCommand('copy');
+            showToast('Código copiado!', 'success');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'fixed top-5 right-5 text-white py-2 px-4 rounded-md shadow-lg transform transition-transform duration-300';
+            toast.classList.add(type === 'error' ? 'bg-red-500' : 'bg-sky-500');
+            toast.classList.remove('translate-x-full');
+            setTimeout(() => toast.classList.add('translate-x-full'), 3000);
+        }
+
+        document.getElementById('showRegister').addEventListener('click', (e) => { e.preventDefault(); navigateToAuth('register'); });
+        document.getElementById('showLogin').addEventListener('click', (e) => { e.preventDefault(); navigateToAuth('login'); });
+
+        function init() {
+            loadState();
+            if (state.token && state.user) {
+                initDashboard();
+                navigateToDashboard();
+            } else {
+                navigateToAuth('login');
+            }
+        }
+
+        init();
     </script>
 </body>
 </html>
