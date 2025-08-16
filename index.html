@@ -7,11 +7,15 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Estilos (sem alterações) */
-        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; background-image: radial-gradient(circle at 1px 1px, #27272a 1px, transparent 0); background-size: 20px 20px; }
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #e4e4e7; }
         .glass-card { background: rgba(23, 23, 23, 0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .form-input { background-color: rgba(39, 39, 42, 0.5); border: 1px solid #3f3f46; color: #e4e4e7; transition: all 0.3s; }
-        .form-input:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3); background-color: rgba(39, 39, 42, 0.8); }
+        .form-input:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3); }
+        .btn { transition: all 0.3s ease; }
+        .btn-primary { background-color: #0ea5e9; }
+        .btn-primary:hover { background-color: #38bdf8; }
+        .sidebar-item { border-left: 3px solid transparent; transition: all 0.2s; }
+        .sidebar-item:hover { background-color: rgba(38, 38, 38, 0.5); border-left-color: #38bdf8; }
         .sidebar-item.active { background-color: rgba(14, 165, 233, 0.1); border-left-color: #0ea5e9; font-weight: 600; color: white; }
         #auth-container, #dashboard-container { display: none; }
         #auth-container.active, #dashboard-container.active { display: block; animation: fadeIn 0.5s ease-in-out; }
@@ -19,18 +23,51 @@
         #auth-container [data-page].active { display: flex; }
         #dashboard-container [data-page].active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal { display: none; }
         .modal.active { display: flex; }
     </style>
 </head>
-<body class="text-gray-200">
+<body>
 
     <div id="auth-container">
+        <div data-page="login" class="items-center justify-center min-h-screen p-4">
+            <div class="w-full max-w-md glass-card p-8 rounded-2xl shadow-2xl">
+                <h1 class="text-3xl font-bold text-center text-white">Acesse sua Conta</h1>
+                <form id="loginForm" class="space-y-6 mt-8">
+                    <div><label for="login-email" class="text-sm font-medium text-gray-400">E-mail</label><input type="email" id="login-email" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="voce@exemplo.com"></div>
+                    <div><label for="login-password" class="text-sm font-medium text-gray-400">Senha</label><input type="password" id="login-password" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="••••••••"></div>
+                    <button type="submit" class="btn btn-primary w-full text-white font-semibold py-3 rounded-md">Entrar</button>
+                </form>
+                <div class="text-center mt-6"><a href="#" id="showRegister" class="text-sm text-sky-400 hover:text-sky-300">Não tem uma conta? Cadastre-se</a></div>
+            </div>
         </div>
+        <div data-page="register" class="items-center justify-center min-h-screen p-4">
+            <div class="w-full max-w-md glass-card p-8 rounded-2xl shadow-2xl">
+                <h1 class="text-3xl font-bold text-center text-white">Crie sua Conta</h1>
+                <form id="registerForm" class="space-y-6 mt-8">
+                    <div><label for="register-name" class="text-sm font-medium text-gray-400">Nome</label><input type="text" id="register-name" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="Seu nome"></div>
+                    <div><label for="register-email" class="text-sm font-medium text-gray-400">E-mail</label><input type="email" id="register-email" required class="form-input w-full p-3 mt-1 rounded-md" placeholder="voce@exemplo.com"></div>
+                    <div><label for="register-password" class="text-sm font-medium text-gray-400">Senha</label><input type="password" id="register-password" required minlength="8" class="form-input w-full p-3 mt-1 rounded-md" placeholder="Mínimo 8 caracteres"></div>
+                    <button type="submit" class="btn btn-primary w-full text-white font-semibold py-3 rounded-md">Criar Conta</button>
+                </form>
+                <div class="text-center mt-6"><a href="#" id="showLogin" class="text-sm text-sky-400 hover:text-sky-300">Já tem uma conta? Faça Login</a></div>
+            </div>
+        </div>
+    </div>
 
     <div id="dashboard-container">
         <div class="flex h-screen">
             <aside class="w-64 glass-card p-4 flex flex-col">
-                 </aside>
+                <div class="text-center mb-10"><h1 class="text-2xl font-bold text-white">HotTrack</h1></div>
+                <nav id="sidebarNav" class="flex flex-col space-y-2">
+                    <a href="#" data-target="dashboard-main" class="sidebar-item p-3 rounded-lg flex items-center">Dashboard</a>
+                    <a href="#" data-target="pressel" class="sidebar-item p-3 rounded-lg flex items-center">Pressels</a>
+                    <a href="#" data-target="pixels" class="sidebar-item p-3 rounded-lg flex items-center">Pixels</a>
+                    <a href="#" data-target="bots" class="sidebar-item p-3 rounded-lg flex items-center">Bots</a>
+                    <a href="#" data-target="settings" class="sidebar-item p-3 rounded-lg flex items-center">Configurações</a>
+                </nav>
+                <div class="mt-auto"><button id="logoutButton" class="w-full bg-gray-700 hover:bg-red-600/50 text-white font-semibold py-2 px-4 rounded-md">Sair</button></div>
+            </aside>
             <main class="flex-1 p-8 overflow-y-auto"><div id="dashboard-content-container"></div></main>
         </div>
     </div>
@@ -38,17 +75,18 @@
     <template id="template-dashboard-main">
         <div data-page="dashboard-main">
             <h1 class="text-3xl font-bold text-white mb-6">Visão Geral</h1>
-            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
-                <div class="glass-card p-6 rounded-lg"><h3 class="text-gray-400">Cliques (30d)</h3><p id="total-clicks" class="text-4xl font-bold text-green-400">0</p></div>
-                <div class="glass-card p-6 rounded-lg"><h3 class="text-gray-400">PIX Pagos (30d)</h3><p id="pix-paid" class="text-4xl font-bold text-sky-400">0</p></div>
-                <div class="glass-card p-6 rounded-lg"><h3 class="text-gray-400">PIX Gerados (30d)</h3><p id="pix-generated" class="text-4xl font-bold text-amber-400">0</p></div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-lg"><h3 class="text-gray-400">Cliques (30d)</h3><p id="stats-clicks" class="text-4xl font-bold text-sky-400">0</p></div>
+                <div class="glass-card p-6 rounded-lg"><h3 class="text-gray-400">PIX Gerados (30d)</h3><p id="stats-pix-generated" class="text-4xl font-bold text-amber-400">0</p></div>
+                <div class="glass-card p-6 rounded-lg"><h3 class="text-gray-400">PIX Pagos (30d)</h3><p id="stats-pix-paid" class="text-4xl font-bold text-green-400">0</p></div>
             </div>
-            <div class="mt-8 grid grid-cols-1 lg:grid-cols-1">
-                <div class="glass-card p-6 rounded-lg"><h3 class="text-xl font-semibold text-white mb-4">Top Estados por Cliques</h3><div id="top-states-list"></div></div>
+            <div class="mt-8 glass-card p-6 rounded-lg">
+                <h3 class="text-xl font-semibold text-white mb-4">Top Estados por Cliques</h3>
+                <div id="top-states-list"></div>
             </div>
         </div>
     </template>
-
+    
     <template id="template-pressel">
         <div data-page="pressel">
             <h1 class="text-3xl font-bold text-white mb-6">Gerenciador de Pressels</h1>
@@ -56,214 +94,296 @@
                 <section class="lg:col-span-2 glass-card p-6 rounded-lg">
                     <h2 class="text-xl font-semibold mb-4 text-white">Criar Nova Pressel</h2>
                     <form id="presselForm" class="space-y-4">
-                        <div><label for="presellName" class="text-sm font-medium text-gray-400">Nome da Pressel</label><input type="text" id="presellName" required class="form-input w-full p-2 mt-1 rounded-md" placeholder="Ex: Campanha Dia das Mães"></div>
+                        <div><label for="presellName" class="text-sm font-medium text-gray-400">Nome da Pressel</label><input type="text" id="presellName" required class="form-input w-full p-2 mt-1 rounded-md"></div>
                         <div><label for="bot_id_presell" class="text-sm font-medium text-gray-400">Bot do Telegram</label><select id="bot_id_presell" required class="form-input w-full p-2 mt-1 rounded-md"></select></div>
                         <div><label class="text-sm font-medium text-gray-400">Contas de Pixel</label><div id="pixel-checkbox-list" class="mt-1 space-y-2 p-3 border border-gray-600 rounded-md max-h-32 overflow-y-auto"></div></div>
-                        <div><label for="white_page_link" class="text-sm font-medium text-gray-400">Página Branca (URL de fallback)</label><input type="url" id="white_page_link" required class="form-input w-full p-2 mt-1 rounded-md" placeholder="https://sua-oferta.com"></div>
-                        <button type="submit" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-semibold py-2 px-4 rounded-md transition-colors">Gerar e Salvar Pressel</button>
+                        <div><label for="white_page_link" class="text-sm font-medium text-gray-400">Página Branca (URL)</label><input type="url" id="white_page_link" required class="form-input w-full p-2 mt-1 rounded-md"></div>
+                        <button type="submit" class="btn btn-primary w-full text-white font-semibold py-2 px-4 rounded-md">Criar Pressel</button>
                     </form>
                 </section>
                 <section class="lg:col-span-3 glass-card p-6 rounded-lg">
-                    <h2 class="text-xl font-semibold text-white mb-4">Suas Pressels Salvas</h2>
+                    <h2 class="text-xl font-semibold text-white mb-4">Suas Pressels</h2>
                     <div id="saved-pressels-list" class="space-y-3 max-h-[600px] overflow-y-auto"></div>
                 </section>
             </div>
         </div>
     </template>
-    
+
     <script>
-        // Use uma URL relativa para funcionar em qualquer ambiente (local ou produção)
-        const API_BASE_URL = ''; 
-        const state = { user: null, token: null, dashboardData: {} };
-        
-        // Funções de Navegação e Estado (sem alterações)
-        // navigateToAuth, navigateToDashboard, switchDashboardTab, saveState, loadState
-        
-        // Função de Request (sem alterações)
-        async function apiRequest(endpoint, method = 'GET', body = null) { /* ...código anterior... */ }
+    // =================================================================================
+    // HOTTRACK SAAS - SCRIPT DO CLIENTE
+    // =================================================================================
+    
+    // --- CONFIGURAÇÃO E ESTADO GLOBAL ---
+    
+    // IMPORTANTE:
+    // Se você estiver testando localmente (com 'Live Server' no VSCode, por exemplo),
+    // substitua a linha abaixo pela URL completa da sua API na Vercel.
+    // Ex: const API_BASE_URL = 'https://seu-projeto.vercel.app';
+    const API_BASE_URL = ''; // Deixe em branco para o deploy na Vercel
 
-        // Funções de Autenticação e Logout (sem alterações)
-        // loginForm, registerForm, logoutButton
+    const state = {
+        user: null,
+        token: null,
+        dashboardData: {}
+    };
+    
+    // --- ELEMENTOS DO DOM ---
+    const authContainer = document.getElementById('auth-container');
+    const dashboardContainer = document.getElementById('dashboard-container');
+    const dashboardContentContainer = document.getElementById('dashboard-content-container');
+
+    // --- FUNÇÕES DE NAVEGAÇÃO E RENDERIZAÇÃO ---
+    
+    function navigateToAuth(pageName) {
+        dashboardContainer.classList.remove('active');
+        authContainer.classList.add('active');
+        document.querySelectorAll('#auth-container [data-page]').forEach(page => page.classList.toggle('active', page.dataset.page === pageName));
+    }
+
+    function navigateToDashboard() {
+        authContainer.classList.remove('active');
+        dashboardContainer.classList.add('active');
+        switchDashboardTab('dashboard-main');
+    }
+
+    function switchDashboardTab(targetId) {
+        const template = document.getElementById(`template-${targetId}`);
+        if (template) {
+            dashboardContentContainer.innerHTML = template.innerHTML;
+            dashboardContentContainer.querySelector('[data-page]').classList.add('active');
+            bindPageEvents(targetId);
+        }
+        document.querySelectorAll('.sidebar-item').forEach(item => item.classList.toggle('active', item.dataset.target === targetId));
+    }
+    
+    // --- COMUNICAÇÃO COM A API ---
+
+    async function apiRequest(endpoint, method = 'GET', body = null) {
+        const headers = { 'Content-Type': 'application/json' };
+        if (state.token) headers['Authorization'] = `Bearer ${state.token}`;
         
-        async function initDashboard() {
-            try {
-                // A rota /api/dashboard/data já traz todos os dados necessários
-                state.dashboardData = await apiRequest('/api/dashboard/data');
-            } catch (error) {
-                // Lida com token expirado
-                if (error.message.includes('expirado') || error.message.includes('inválido')) {
-                    document.getElementById('logoutButton').click();
+        const options = { method, headers };
+        if (body) options.body = JSON.stringify(body);
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+            if (response.status === 204) return null; // Para respostas DELETE bem-sucedidas
+            
+            const data = await response.json();
+            if (!response.ok) {
+                 // Desloga o usuário se o token for inválido/expirado
+                if (response.status === 401 || response.status === 403) {
+                    logout();
                 }
+                throw new Error(data.message || 'Ocorreu um erro.');
             }
+            return data;
+        } catch (error) {
+            showToast(error.message, 'error');
+            throw error;
         }
-        
-        // Função para popular listas genéricas
-        function renderList(elementId, data, nameField, valueField, unit = '') { /* ...código anterior... */ }
+    }
+    
+    // --- GERENCIAMENTO DE ESTADO E INICIALIZAÇÃO ---
 
-        // LÓGICA DE RENDERIZAÇÃO E EVENTOS DO DASHBOARD (CORRIGIDA)
-        function bindDashboardEvents(pageId) {
-            const data = state.dashboardData;
-            if (pageId === 'dashboard-main') {
-                const stats = data.stats || {};
-                // Alinhado com os dados da API
-                document.getElementById('total-clicks').textContent = stats.clicks || 0;
-                document.getElementById('pix-generated').textContent = stats.pix_generated || 0;
-                document.getElementById('pix-paid').textContent = stats.pix_paid || 0;
-                // Apenas renderiza o que a API fornece
-                renderList('top-states-list', data.topStates, 'state', 'count', 'cliques');
-            }
-            if (pageId === 'pressel') {
-                populateBotSelect(); // Nova função
-                populatePixelCheckboxes();
-                loadAndRenderSavedPressels();
-                document.getElementById('presselForm').addEventListener('submit', onSaveAndGeneratePressel);
-            }
-            if (pageId === 'pixels') {
-                renderPixelAccounts();
-                document.getElementById('addPixelAccountBtn').addEventListener('click', () => openPixelModal());
-                document.getElementById('pixelAccountsList').addEventListener('click', onPixelListClick);
-            }
-            if (pageId === 'settings') {
-                document.getElementById('pushinpay_token').value = data.settings.pushinpay_token || '';
-                document.getElementById('settingsForm').addEventListener('submit', onSettingsFormSubmit);
-            }
-            if (pageId === 'docs') {
-                document.getElementById('userApiKey').textContent = data.settings.api_key;
-            }
-        }
+    function saveState() {
+        localStorage.setItem('hottrack_token', state.token);
+        localStorage.setItem('hottrack_user', JSON.stringify(state.user));
+    }
 
-        // SALVAR PRESSEL (CORRIGIDO)
-        async function onSaveAndGeneratePressel(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('presellName').value.trim();
-            const bot_id = document.getElementById('bot_id_presell').value; // Pega o ID do bot
-            const white_page_url = document.getElementById('white_page_link').value.trim();
-            const selectedPixels = Array.from(document.querySelectorAll('#pixel-checkbox-list input:checked'));
-            const pixel_ids = selectedPixels.map(cb => parseInt(cb.value)); // Envia array de IDs
+    function loadState() {
+        state.token = localStorage.getItem('hottrack_token');
+        const userJson = localStorage.getItem('hottrack_user');
+        if (userJson) state.user = JSON.parse(userJson);
+    }
+    
+    function logout() {
+        state.user = null;
+        state.token = null;
+        localStorage.clear();
+        navigateToAuth('login');
+    }
 
-            if (!name || !bot_id || !white_page_url || pixel_ids.length === 0) {
-                return showToast('Todos os campos são obrigatórios.', 'error');
-            }
-
-            // Payload alinhado com a API final
-            const presselData = { name, bot_id, white_page_url, pixel_ids };
-
+    async function init() {
+        loadState();
+        if (state.token && state.user) {
             try {
-                const savedPressel = await apiRequest('/api/pressels', 'POST', presselData);
-                showToast('Pressel salva com sucesso!', 'success');
-                document.getElementById('presselForm').reset();
-                
-                // Atualiza os dados locais e renderiza a lista
-                state.dashboardData.pressels.unshift(savedPressel);
-                renderSavedPressels(); 
-                
-                const pixelIdStrings = selectedPixels.map(cb => cb.dataset.pixelIdString);
-                generateAndShowPresselCode(savedPressel, pixelIdStrings);
+                // Carrega todos os dados necessários de uma vez
+                state.dashboardData = await apiRequest('/api/dashboard/data');
+                navigateToDashboard();
             } catch (error) {
-                console.error("Erro ao salvar pressel:", error);
+                // Se o token salvo for inválido, força o logout
+                logout();
             }
+        } else {
+            navigateToAuth('login');
         }
+    }
+
+    // --- EVENTOS DE PÁGINA ---
+    
+    function bindPageEvents(pageId) {
+        const data = state.dashboardData;
         
-        // GERAR CÓDIGO DA PRESSEL (sem alterações na lógica interna)
-        function generateAndShowPresselCode(pressel, pixelIdStrings) { /* ...código anterior... */ }
+        if (pageId === 'dashboard-main') {
+            const stats = data.stats || {};
+            document.getElementById('stats-clicks').textContent = stats.clicks || 0;
+            document.getElementById('stats-pix-generated').textContent = stats.pix_generated || 0;
+            document.getElementById('stats-pix-paid').textContent = stats.pix_paid || 0;
+            renderTopStates(data.topStates);
+        }
+        if (pageId === 'pressel') {
+            document.getElementById('presselForm').addEventListener('submit', handleSavePressel);
+            renderPresselFormDependencies();
+            renderPresselList();
+        }
+        // Adicionar bindings para outras páginas (Pixels, Bots, Settings) aqui...
+    }
 
-        // CARREGAR E RENDERIZAR PRESSELS (Otimizado)
-        function loadAndRenderSavedPressels() {
-             renderSavedPressels(); // Apenas renderiza os dados que já temos
+    // --- LÓGICA ESPECÍFICA DAS PÁGINAS ---
+    
+    // Dashboard
+    function renderTopStates(topStates = []) {
+        const listElement = document.getElementById('top-states-list');
+        listElement.innerHTML = '';
+        if (topStates.length > 0) {
+            topStates.forEach(item => {
+                listElement.innerHTML += `<div class="flex justify-between items-center text-gray-300 py-2 border-b border-gray-700/50 text-sm"><span>${item.state}</span><span class="font-semibold">${item.count} cliques</span></div>`;
+            });
+        } else {
+            listElement.innerHTML = `<p class="text-gray-500 text-sm">Nenhum dado disponível.</p>`;
+        }
+    }
+
+    // Pressels
+    function renderPresselFormDependencies() {
+        const bots = state.dashboardData.bots || [];
+        const pixels = state.dashboardData.pixels || [];
+        const botSelect = document.getElementById('bot_id_presell');
+        const pixelCheckboxList = document.getElementById('pixel-checkbox-list');
+
+        botSelect.innerHTML = '<option value="">Selecione um Bot</option>';
+        if (bots.length > 0) {
+            bots.forEach(bot => botSelect.innerHTML += `<option value="${bot.id}">${bot.bot_name}</option>`);
+        } else {
+            botSelect.innerHTML = '<option value="">Cadastre um bot primeiro</option>';
+            botSelect.disabled = true;
         }
 
-        function renderSavedPressels() {
-            const container = document.getElementById('saved-pressels-list');
-            container.innerHTML = '';
-            const pressels = state.dashboardData.pressels || [];
-            if (pressels.length > 0) {
-                pressels.forEach(p => {
-                    container.innerHTML += `<div class="bg-gray-700/50 p-3 rounded-md flex justify-between items-center"><div><p class="font-semibold">${p.name}</p><p class="text-sm text-gray-400 font-mono">Bot: ${p.bot_name}</p></div><div class="space-x-2"><button onclick="handleReGenerateCode(${p.id})" class="btn bg-sky-600 text-white text-xs py-1 px-2 rounded-md">Ver Código</button><button onclick="handleDeletePressel(${p.id})" class="btn bg-red-600/80 text-white text-xs py-1 px-2 rounded-md">Excluir</button></div></div>`;
-                });
-            } else {
-                container.innerHTML = '<p class="text-gray-500 text-sm">Nenhuma pressel salva ainda.</p>';
-            }
+        pixelCheckboxList.innerHTML = '';
+        if (pixels.length > 0) {
+            pixels.forEach(pixel => {
+                pixelCheckboxList.innerHTML += `<label class="flex items-center space-x-2 text-gray-300 cursor-pointer"><input type="checkbox" value="${pixel.id}" data-pixel-id-string="${pixel.pixel_id}" class="form-checkbox bg-gray-800 border-gray-600 rounded text-sky-500"><span>${pixel.account_name}</span></label>`;
+            });
+        } else {
+            pixelCheckboxList.innerHTML = '<p class="text-sm text-gray-500">Cadastre um pixel primeiro.</p>';
+        }
+    }
+
+    function renderPresselList() {
+        const container = document.getElementById('saved-pressels-list');
+        container.innerHTML = '';
+        const pressels = state.dashboardData.pressels || [];
+        if (pressels.length > 0) {
+            pressels.forEach(p => {
+                container.innerHTML += `<div class="bg-gray-700/50 p-3 rounded-md flex justify-between items-center"><div><p class="font-semibold">${p.name}</p><p class="text-sm text-gray-400">Bot: ${p.bot_name}</p></div><button onclick="handleDeletePressel(${p.id})" class="btn bg-red-600/80 text-white text-xs py-1 px-2 rounded-md">Excluir</button></div>`;
+            });
+        } else {
+            container.innerHTML = '<p class="text-gray-500 text-sm">Nenhuma pressel salva.</p>';
+        }
+    }
+
+    async function handleSavePressel(e) {
+        e.preventDefault();
+        const form = e.target;
+        const presselData = {
+            name: form.presellName.value,
+            bot_id: form.bot_id_presell.value,
+            white_page_url: form.white_page_link.value,
+            pixel_ids: Array.from(form.querySelectorAll('#pixel-checkbox-list input:checked')).map(cb => parseInt(cb.value))
+        };
+
+        if (!presselData.name || !presselData.bot_id || !presselData.white_page_url || presselData.pixel_ids.length === 0) {
+            return showToast('Todos os campos são obrigatórios.', 'error');
         }
 
-        async function handleReGenerateCode(presselId) {
-            const pressel = state.dashboardData.pressels.find(p => p.id === presselId);
-            if (!pressel) return showToast('Pressel não encontrada.', 'error');
-            
-            // Filtra os pixels corretos baseado nos IDs associados à pressel
-            const pixelConfigs = state.dashboardData.pixels.filter(p => pressel.pixel_ids.includes(p.id));
-            const pixelIdStrings = pixelConfigs.map(p => p.pixel_id);
-            generateAndShowPresselCode(pressel, pixelIdStrings);
-        }
+        try {
+            const newPressel = await apiRequest('/api/pressels', 'POST', presselData);
+            state.dashboardData.pressels.unshift(newPressel); // Adiciona no início da lista local
+            renderPresselList(); // Re-renderiza a lista com o novo item
+            form.reset();
+            showToast('Pressel criada com sucesso!', 'success');
+        } catch (error) {}
+    }
 
-        async function handleDeletePressel(presselId) {
-            if (confirm('Tem certeza que deseja excluir esta pressel?')) {
-                try {
-                    await apiRequest(`/api/pressels/${presselId}`, 'DELETE');
-                    showToast('Pressel excluída com sucesso.', 'success');
-                    // Remove da lista local e renderiza novamente
-                    state.dashboardData.pressels = state.dashboardData.pressels.filter(p => p.id !== presselId);
-                    renderSavedPressels();
-                } catch (error) {}
-            }
-        }
-        
-        // LÓGICA DOS PIXELS (Formulário agora envia 'account_name')
-        pixelForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('pixelAccountId').value;
-            const data = {
-                account_name: document.getElementById('account_name').value,
-                pixel_id: document.getElementById('pixel_id').value,
-                meta_api_token: document.getElementById('meta_api_token').value,
-            };
-            try {
-                const requestPromise = id ? apiRequest(`/api/pixels/${id}`, 'PUT', data) : apiRequest('/api/pixels', 'POST', data);
-                await requestPromise;
-                showToast(`Conta de pixel ${id ? 'atualizada' : 'adicionada'}!`, 'success');
-                closePixelModal();
-                // Recarrega todos os dados para manter tudo sincronizado
-                await initDashboard(); 
-                renderPixelAccounts();
-            } catch (error) {}
-        });
+    async function handleDeletePressel(presselId) {
+        if (!confirm('Tem certeza que deseja excluir esta pressel?')) return;
+        try {
+            await apiRequest(`/api/pressels/${presselId}`, 'DELETE');
+            state.dashboardData.pressels = state.dashboardData.pressels.filter(p => p.id !== presselId);
+            renderPresselList();
+            showToast('Pressel excluída com sucesso.', 'success');
+        } catch (error) {}
+    }
 
-        // RENDERIZAR PIXELS (Exibe 'account_name')
-        function renderPixelAccounts() {
-            const pixelList = document.getElementById('pixelAccountsList');
-            pixelList.innerHTML = '';
-            const pixels = state.dashboardData.pixels || [];
-            if (pixels.length > 0) {
-                pixels.forEach(acc => {
-                    pixelList.innerHTML += `<div class="bg-gray-700/50 p-3 rounded-md flex justify-between items-center"><div><p class="font-semibold">${acc.account_name}</p><p class="text-sm text-gray-400 font-mono">Pixel ID: ${acc.pixel_id}</p></div><div class="space-x-2"><button data-id="${acc.id}" class="edit-pixel btn bg-gray-600 text-white text-xs py-1 px-2 rounded-md">Editar</button><button data-id="${acc.id}" class="delete-pixel btn bg-red-600/80 text-white text-xs py-1 px-2 rounded-md">Excluir</button></div></div>`;
-                });
-            } else {
-                pixelList.innerHTML = '<p class="text-gray-400">Nenhuma conta de pixel cadastrada.</p>';
-            }
-        }
-        
-        // NOVAS FUNÇÕES PARA POPULAR FORMULÁRIOS
-        function populateBotSelect() {
-            const select = document.getElementById('bot_id_presell');
-            select.innerHTML = '<option value="">Selecione um Bot</option>';
-            const bots = state.dashboardData.bots || [];
-            if (bots.length > 0) {
-                bots.forEach(bot => {
-                    select.innerHTML += `<option value="${bot.id}">${bot.bot_name}</option>`;
-                });
-            } else {
-                select.innerHTML = '<option value="">Nenhum bot cadastrado</option>';
-                select.disabled = true;
-            }
-        }
+    // --- UTILITÁRIOS ---
+    
+    function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.className = `fixed top-5 right-5 text-white py-2 px-4 rounded-md shadow-lg transform translate-x-full transition-transform duration-300 ${type === 'error' ? 'bg-red-500' : 'bg-green-500'}`;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.classList.remove('translate-x-full');
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }, 10);
+    }
+    
+    // --- EVENT LISTENERS GLOBAIS ---
 
-        function populatePixelCheckboxes() { /* ...código anterior... */ }
-        
-        // DEMAIS FUNÇÕES (Settings, Modais, Toast, Init)
-        // onSettingsFormSubmit, onPixelListClick, openPixelModal, closePixelModal
-        // showToast, init, etc (sem alterações significativas)
-        
-        // ...cole aqui o restante das funções que não foram modificadas...
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            const data = await apiRequest('/api/sellers/login', 'POST', {
+                email: e.target.elements['login-email'].value,
+                password: e.target.elements['login-password'].value,
+            });
+            state.user = data.seller;
+            state.token = data.token;
+            saveState();
+            await init();
+        } catch (error) {}
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            await apiRequest('/api/sellers/register', 'POST', {
+                name: e.target.elements['register-name'].value,
+                email: e.target.elements['register-email'].value,
+                password: e.target.elements['register-password'].value,
+            });
+            showToast('Cadastro realizado com sucesso! Faça o login.', 'success');
+            navigateToAuth('login');
+        } catch (error) {}
+    });
+
+    document.getElementById('sidebarNav').addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = e.target.closest('.sidebar-item');
+        if (target) switchDashboardTab(target.dataset.target);
+    });
+    
+    document.getElementById('showRegister').addEventListener('click', (e) => { e.preventDefault(); navigateToAuth('register'); });
+    document.getElementById('showLogin').addEventListener('click', (e) => { e.preventDefault(); navigateToAuth('login'); });
+    document.getElementById('logoutButton').addEventListener('click', logout);
+
+    // --- INICIALIZAÇÃO DA APLICAÇÃO ---
+    init();
 
     </script>
 </body>
